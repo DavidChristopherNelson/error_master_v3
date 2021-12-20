@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
 
   def hello
-    render html: "hello, world!"
+    render html: "Welcome to Error Master"
   end
 end
