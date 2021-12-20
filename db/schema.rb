@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_20_025206) do
+ActiveRecord::Schema.define(version: 2021_12_20_063333) do
 
   create_table "deco_errors", force: :cascade do |t|
     t.text "title"
@@ -47,7 +47,9 @@ ActiveRecord::Schema.define(version: 2021_12_20_025206) do
     t.text "logic"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["execution_order"], name: "index_filters_on_execution_order", unique: true
     t.index ["folder_id"], name: "index_filters_on_folder_id"
+    t.index ["name"], name: "index_filters_on_name", unique: true
   end
 
   create_table "folders", force: :cascade do |t|
@@ -55,6 +57,7 @@ ActiveRecord::Schema.define(version: 2021_12_20_025206) do
     t.integer "parent_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_folders_on_name", unique: true
     t.index ["parent_id"], name: "index_folders_on_parent_id"
   end
 

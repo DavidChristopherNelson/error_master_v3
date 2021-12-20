@@ -22,7 +22,6 @@ class CreateDecoErrors < ActiveRecord::Migration[6.1]
       t.text :exception_class
       t.text :exception_message
       t.text :exception_stacktrace
-      t.references :filter, null: false, foreign_key: true
       t.timestamps
     end
   end
