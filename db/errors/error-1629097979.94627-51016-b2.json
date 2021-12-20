@@ -1,0 +1,23 @@
+{
+  "request_id": "BGJ:0:9:17:commission_worker_key_1629097960_1418_a6",
+  "params": "{}",
+  "title": "Exception delivering affiliate notice",
+  "priority": 5,
+  "release": "stable",
+  "rails_env": "production",
+  "session_id": "",
+  "session_data": "nil",
+  "type": "system",
+  "controller": "commission_worker_key_1629097960_1418_a6",
+  "hostname": "b2",
+  "request_log": "",
+  "exception": {
+    "stacktrace": "[RAILS_ROOT]/app/helpers/application_helper.rb:1135:in `f_currency'\n[RAILS_ROOT]/app/helpers/application_helper.rb:1088:in `f_cur2'\n[RAILS_ROOT]/app/helpers/payments_helper.rb:76:in `process_affiliate_system'\n[RAILS_ROOT]/lib/workers/commission_worker.rb:25:in `do_work'\n[RAILS_ROOT]/lib/bg_jobs/server/worker_base.rb:170:in `run_job'\n[RAILS_ROOT]/lib/bg_jobs/server/worker.rb:267:in `do_job_action'\n[RAILS_ROOT]/lib/bg_jobs/server/worker.rb:172:in `run_client_connection'\n[RAILS_ROOT]/lib/bg_jobs/server/worker.rb:171:in `synchronize'\n[RAILS_ROOT]/lib/bg_jobs/server/worker.rb:171:in `run_client_connection'\n[RAILS_ROOT]/lib/bg_jobs/server/worker.rb:58:in `run'\n[RAILS_ROOT]/lib/bg_jobs/server/worker.rb:57:in `start'\n[RAILS_ROOT]/lib/bg_jobs/server/worker.rb:57",
+    "message": "undefined method `apply_discount' for nil:NilClass",
+    "class": "NoMethodError"
+  },
+  "environment_variables": "REMOTE_ADDR: 0.0.0.0\nREQUEST_METHOD: GET\nSERVER_PORT: 80",
+  "site_url": "http:///",
+  "action": "key_1629097960_1418_a6",
+  "date": "2021-08-16 17:12:59"
+}

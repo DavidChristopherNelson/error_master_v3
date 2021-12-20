@@ -1,0 +1,17 @@
+<%= form_with(model: deco_error) do |form| %>
+  <% if deco_error.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(deco_error.errors.count, "error") %> prohibited this deco_error from being saved:</h2>
+
+      <ul>
+        <% deco_error.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

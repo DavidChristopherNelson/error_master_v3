@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Deco Errors</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @deco_errors.each do |deco_error| %>
+      <tr>
+        <td><%= link_to 'Show', deco_error %></td>
+        <td><%= link_to 'Edit', edit_deco_error_path(deco_error) %></td>
+        <td><%= link_to 'Destroy', deco_error, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Deco Error', new_deco_error_path %>
