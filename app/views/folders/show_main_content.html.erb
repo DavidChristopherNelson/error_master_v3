@@ -1,0 +1,16 @@
+<div class="layer title">
+  <h1><%= @folder.name %></h1>
+</div>
+<%= form_with url: "bulk_action", method: :get, id: "bulk_action" do |form| %>
+  <% @folder.deco_errors.each do |deco_error| %>
+    <div class="layer horizontal-container">
+      <div class="left">
+        <input type="checkbox" 
+             value=<%= "#{deco_error.id}" %> 
+             name="id[]" 
+             id="id_<%= "#{deco_error.id}" %>">
+        <h3><%= deco_error.title %></h3>
+      </div>
+    </div>
+  <% end %>
+<% end %>

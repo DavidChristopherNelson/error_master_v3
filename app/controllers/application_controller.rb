@@ -1,5 +1,7 @@
 class ApplicationController < ActionController::Base
-  def hello
-    render(html: 'Welcome to Error Master with a working database!')
+  def home
+    @folders = Folder.all
   end
+
+  def run_rule_engine; end
 end

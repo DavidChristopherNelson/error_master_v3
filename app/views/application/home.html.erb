@@ -1,0 +1,29 @@
+<div class="wrapper vetical-container">
+  <div class="top-bar left">
+    <%= image_tag("logo_text_horizontal_black.svg", class: "logo") %>
+    <div class="tool-bar right">
+    </div>
+  </div>
+  <div class="horizontal-container">
+    <div class="side-bar vertical-container">
+      <div class="layer title">
+        <h1>Folders</h1>
+      </div>
+      <% @folders.each do |folder| %>
+        <div class="layer horizontal-container">
+          <div class="left">
+            <%= link_to folder, remote: true do %>
+              <h3><%= folder.name %>:</h3>
+            <% end %>
+          </div>
+          <div class="right">
+            <h3> <%= folder.deco_errors.count %> errors </h3>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class="main-content vertical-container">
+    </div>
+  </div>
+</div>
+<%= javascript_pack_tag "ajax_listeners.js" %>
