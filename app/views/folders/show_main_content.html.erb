@@ -1,7 +1,12 @@
 <div class="layer title">
   <h1><%= @folder.name %></h1>
 </div>
-<%= form_with url: "bulk_action", method: :get, id: "bulk_action" do |form| %>
+<%= form_with url: "bulk_action", 
+                    method: :get, 
+                    id: "bulk_action", 
+                    local: false do |form| %>
+  <%= form.hidden_field :folder_id, value: @folder.id %>
+  <%= form.hidden_field :read, value: false, id: 'read_hidden_field' %>
   <% @folder.deco_errors.each do |deco_error| %>
     <div class="layer horizontal-container">
       <div class="left">
@@ -10,7 +15,9 @@
              name="id[]" 
              id="id_<%= "#{deco_error.id}" %>">
         <h3><%= deco_error.title %></h3>
+        <p><%= " read: #{deco_error.read}" %></p>
       </div>
     </div>
   <% end %>
 <% end %>
+<%= javascript_pack_tag "folder_listener.js" %>

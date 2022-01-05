@@ -52,46 +52,46 @@ class DecoErrorsController < ApplicationController
   # PATCH/PUT /deco_errors/1
   # PATCH/PUT /deco_errors/1.json
   def update
-    respond_to do |format|
-      if @deco_error.update(deco_error_params)
-        format.html do
-          redirect_to(@deco_error,
-                      notice: 'Deco error was successfully \
-                                  updated.'
-                     )
+    unless @deco_errors.nil?
+      if /mark_as_read/.match?(params[:submission_data])
+        @deco_errors.each do |deco_error|
+          deco_error.update!(read: true)
         end
-        format.json { render(:show, status: :ok, location: @deco_error) }
-      else
-        format.html { render(:edit) }
-        format.json do
-          render(json: @deco_error.errors,
-                 status: :unprocessable_entity
-                )
+      elsif /mark_as_unread/.match?(params[:submission_data])
+        @deco_errors.each do |deco_error|
+          deco_error.update!(read: false)
         end
       end
     end
+
+    @folder = Folder.find(params[:folder_id])
+    render(json: {
+      main_content: render_to_string('folders/show_main_content', layout: false),
+      tool_bar: render_to_string('folders/show_tool_bar', layout: false),
+      side_bar_update_counts: Folder.serialize
+    }
+          )
   end
 
   # DELETE /deco_errors/1
   # DELETE /deco_errors/1.json
   def destroy
-    @deco_error.destroy!
-    respond_to do |format|
-      format.html do
-        redirect_to(deco_errors_url,
-                    notice: 'Deco error was successfully \
-                                destroyed.'
-                   )
-      end
-      format.json { head(:no_content) }
-    end
+    @deco_errors&.each(&:destroy!)
+
+    @folder = Folder.find(params[:folder_id])
+    render(json: {
+      main_content: render_to_string('folders/show_main_content', layout: false),
+      tool_bar: render_to_string('folders/show_tool_bar', layout: false),
+      side_bar_update_counts: Folder.serialize
+    }
+          )
   end
 
   private
 
   # Use callbacks to share common setup or constraints between actions.
   def set_deco_error
-    @deco_error = DecoError.find(params[:id])
+    @deco_errors = params[:id].nil? ? nil : DecoError.find(params[:id])
   end
 
   # Only allow a list of trusted parameters through.

@@ -12,7 +12,8 @@ class FoldersController < ApplicationController
   def show
     render(json: {
       main_content: render_to_string('show_main_content', layout: false),
-      tool_bar: render_to_string('show_tool_bar', layout: false)
+      tool_bar: render_to_string('show_tool_bar', layout: false),
+      side_bar_update_counts: Folder.serialize
     }
           )
   end

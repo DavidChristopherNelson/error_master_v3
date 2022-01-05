@@ -1,23 +1,27 @@
+<button class="check-all">
+  <%= image_tag("check-all.svg", class: "icon") %>
+</button>
 <button type="submit" 
-        name="routeFlag" 
-        value="routeToDecoErrorUpdate"
-        form="bulk_action">
+        name="submission_data" 
+        value="routeToDecoErrorUpdate mark_as_read"
+        form="bulk_action"
+        id="mark-as-read-button">
   <%= image_tag("eye.svg", class: "icon") %>
 </button>
 <button type="submit" 
-        name="routeFlag" 
-        value="routeToDecoErrorUpdate"
+        name="submission_data" 
+        value="routeToDecoErrorUpdate mark_as_unread"
         form="bulk_action">
   <%= image_tag("eye-closed.svg", class: "icon") %>
 </button>
 <button type="submit" 
-        name="routeFlag" 
+        name="submission_data" 
         value="routeToDecoErrorDestroy"
         form="bulk_action">
   <%= image_tag("trash.svg", class: "icon") %>
 </button>
 <button type="submit" 
-        name="routeFlag" 
+        name="submission_data" 
         value="routeToApplicationRunRuleEngine"
         form="bulk_action">
   <%= image_tag("rule-engine.svg", class: "icon") %>

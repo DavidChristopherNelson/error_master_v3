@@ -10,14 +10,19 @@
         <h1>Folders</h1>
       </div>
       <% @folders.each do |folder| %>
-        <div class="layer horizontal-container">
+        <div id="<%= folder.id %>" class="layer folder">
           <div class="left">
             <%= link_to folder, remote: true do %>
-              <h3><%= folder.name %>:</h3>
+              <h3><%= "#{folder.name}: " %>
+                <span class="error_count">
+                  <% if folder.deco_errors.count == 1 %>
+                    <%= "1 error" %>
+                  <% else %>
+                    <%= "#{folder.deco_errors.count} errors" %>
+                  <% end %>
+                </span>
+              </h3>
             <% end %>
-          </div>
-          <div class="right">
-            <h3> <%= folder.deco_errors.count %> errors </h3>
           </div>
         </div>
       <% end %>
