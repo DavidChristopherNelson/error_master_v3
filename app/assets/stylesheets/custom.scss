@@ -1,6 +1,8 @@
 /* 
 Table of Contents
+* Variables
 * General (elements that appear in more than one category)
+  * Color Variables
   * Text
   * Structure
   * Images
@@ -56,6 +58,7 @@ button {
 
 /* General - Color Variables */
 $hue-rotate-white: invert(98%) sepia(43%) saturate(292%) hue-rotate(244deg) brightness(119%) contrast(100%);
+$theme-green: #2b3f27;
 
 /* General - Text */
 h1, h3, p {}
@@ -90,24 +93,27 @@ h1, h3, p {}
 .icon {
   height: 20px;
   margin: 10px;
+  filter: $hue-rotate-white;
 }
 
 /* top-bar */
 .top-bar {
   height: 40px;
+  background-color: $theme-green;
 }
 
 .logo {
   width: 250px;
   filter: $hue-rotate-white;
-  background-color: red;
 }
 
 /* side-bar */
 .side-bar {
+  overflow: auto;
   width: 250px;
   height: 100vh;
-  overflow: auto;
+  color: white;
+  background-color: $theme-green;
 }
 
 /* main-content */
