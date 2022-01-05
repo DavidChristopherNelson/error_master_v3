@@ -53,11 +53,12 @@ class DecoErrorsController < ApplicationController
   # PATCH/PUT /deco_errors/1.json
   def update
     unless @deco_errors.nil?
-      if /mark_as_read/.match?(params[:submission_data])
+      case params[:submission_data]
+      when /mark_as_read/
         @deco_errors.each do |deco_error|
           deco_error.update!(read: true)
         end
-      elsif /mark_as_unread/.match?(params[:submission_data])
+      when /mark_as_unread/
         @deco_errors.each do |deco_error|
           deco_error.update!(read: false)
         end

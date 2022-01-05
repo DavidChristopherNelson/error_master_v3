@@ -14,8 +14,8 @@ namespace :db_setup do
 
   desc 'Reset, migrate and reseed the deployed app'
   task :heroku_reset do
-    system 'heroku pg:reset DATABASE_URL --app cryptic-ridge-73996'
-    system 'heroku run rake db:migrate --app cryptic-ridge-73996'
-    system 'heroku run rake db:seed --app cryptic-ridge-73996'
+    system 'heroku pg:reset DATABASE_URL --app polar-refuge-71806'
+    system 'heroku run rake db:migrate --app polar-refuge-71806'
+    system 'heroku run rake db:seed --app polar-refuge-71806'
   end
 end

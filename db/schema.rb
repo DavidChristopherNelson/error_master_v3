@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_20_063333) do
+ActiveRecord::Schema.define(version: 2022_01_05_063948) do
 
   create_table "deco_errors", force: :cascade do |t|
     t.text "title"
@@ -34,9 +34,9 @@ ActiveRecord::Schema.define(version: 2021_12_20_063333) do
     t.text "exception_class"
     t.text "exception_message"
     t.text "exception_stacktrace"
-    t.integer "filter_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "filter_id", null: false
     t.index ["filter_id"], name: "index_deco_errors_on_filter_id"
   end
 
