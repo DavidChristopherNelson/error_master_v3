@@ -6,18 +6,47 @@
                     id: "bulk_action", 
                     local: false do |form| %>
   <%= form.hidden_field :folder_id, value: @folder.id %>
-  <%= form.hidden_field :read, value: false, id: 'read_hidden_field' %>
-  <% @folder.deco_errors.each do |deco_error| %>
+  <% @deco_errors.each do |deco_error| %>
     <div class="layer horizontal-container">
       <div class="left">
         <input type="checkbox" 
              value=<%= "#{deco_error.id}" %> 
              name="id[]" 
-             id="id_<%= "#{deco_error.id}" %>">
+             id="id_<%= "#{deco_error.id}" %>"
+             class="error-checkbox">
         <h3><%= deco_error.title %></h3>
         <p><%= " read: #{deco_error.read}" %></p>
       </div>
     </div>
   <% end %>
 <% end %>
+<div class="layer">
+  <div></div>
+  <div class="page-nav">
+    <% if @page_num.to_i == 0 %>
+      <%= image_tag "chevron-left.svg", class: "icon visibility-hidden" %>
+    <% else %>
+      <%= link_to folder_path(id: @folder.id, 
+                              move_to_page: @page_num.to_i - 1),
+                  remote: true do %>
+        <%= image_tag "chevron-left.svg", class: "icon" %>
+      <% end %>
+    <% end %>
+    <div class="page-number">
+      <%= "#{@page_num} of #{@max_page_num}" %>
+    </div>
+    <% if @page_num.to_i == @max_page_num %>
+      <%= image_tag "chevron-right.svg", class: "icon visibility-hidden" %>
+    <% else %>
+      <%= link_to folder_path(id: @folder.id, 
+                              move_to_page: @page_num.to_i + 1),
+                  remote: true do %>
+        <%= image_tag "chevron-right.svg", class: "icon" %>
+      <% end %>
+    <% end %>
+  </div>
+  <div></div>
+</div>
+<%= render 'shared/modal' %>
+
 <%= javascript_pack_tag "folder_listener.js" %>

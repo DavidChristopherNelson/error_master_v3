@@ -52,40 +52,17 @@ class DecoErrorsController < ApplicationController
   # PATCH/PUT /deco_errors/1
   # PATCH/PUT /deco_errors/1.json
   def update
-    unless @deco_errors.nil?
-      case params[:submission_data]
-      when /mark_as_read/
-        @deco_errors.each do |deco_error|
-          deco_error.update!(read: true)
-        end
-      when /mark_as_unread/
-        @deco_errors.each do |deco_error|
-          deco_error.update!(read: false)
-        end
-      end
-    end
-
+    @deco_errors.each { |deco_error| deco_error.update!(deco_error_params) } unless deco_error_params.nil?
     @folder = Folder.find(params[:folder_id])
-    render(json: {
-      main_content: render_to_string('folders/show_main_content', layout: false),
-      tool_bar: render_to_string('folders/show_tool_bar', layout: false),
-      side_bar_update_counts: Folder.serialize
-    }
-          )
+    redirect_to(@folder)
   end
 
   # DELETE /deco_errors/1
   # DELETE /deco_errors/1.json
   def destroy
     @deco_errors&.each(&:destroy!)
-
     @folder = Folder.find(params[:folder_id])
-    render(json: {
-      main_content: render_to_string('folders/show_main_content', layout: false),
-      tool_bar: render_to_string('folders/show_tool_bar', layout: false),
-      side_bar_update_counts: Folder.serialize
-    }
-          )
+    redirect_to(@folder)
   end
 
   private
@@ -97,6 +74,8 @@ class DecoErrorsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def deco_error_params
-    params.fetch(:deco_error, {})
+    return nil if params[:deco_error].nil?
+
+    params.require(:deco_error).permit(:read)
   end
 end

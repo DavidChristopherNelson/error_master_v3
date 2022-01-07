@@ -10,6 +10,8 @@ class FoldersController < ApplicationController
   # GET /folders/1
   # GET /folders/1.json
   def show
+    @page_num = params[:move_to_page].nil? ? 0 : params[:move_to_page]
+    @deco_errors = paginator(@folder, @page_num)
     render(json: {
       main_content: render_to_string('show_main_content', layout: false),
       tool_bar: render_to_string('show_tool_bar', layout: false),
@@ -109,5 +111,15 @@ class FoldersController < ApplicationController
   # Only allow a list of trusted parameters through.
   def folder_params
     params.fetch(:folder, {})
+  end
+
+  def paginator(folder, page_number = 0)
+    page_number = 0 if page_number.nil?
+    page_number = Integer(page_number, 10)
+    pagelimit = 10
+    # The following code will just query for the total and not return all errors
+    # https://guides.rubyonrails.org/active_record_querying.html#total-of-grouped-items
+    @max_page_num = folder.deco_errors.count / pagelimit
+    folder.deco_errors.limit(pagelimit).offset(page_number * pagelimit)
   end
 end

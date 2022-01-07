@@ -6,7 +6,9 @@ Table of Contents
   * Text
   * Structure
   * Images
+  * Modals
 * top-bar
+  * Dropdown menu
 * side-bar
 * main-content
 * footer
@@ -15,7 +17,7 @@ Template for ordering css properties
 .selector {
   // Positioning 
   position: absolute;
-  z-index: 10;
+  z-index: 1;
   top: 0;
   right: 0;
 
@@ -44,6 +46,7 @@ Template for ordering css properties
 }
 */
 
+/* ############################################################################# */
 /* General */
 * {
   margin: 0;
@@ -57,8 +60,11 @@ button {
 }
 
 /* General - Color Variables */
+$theme-green: #2b3f27; //20% light
+$theme-green-dark: #152013; //10% light
+$theme-green-light: #567e4e; //40% light
 $hue-rotate-white: invert(98%) sepia(43%) saturate(292%) hue-rotate(244deg) brightness(119%) contrast(100%);
-$theme-green: #2b3f27;
+$hue-rotate-black: invert(0%) sepia(2%) saturate(8%) hue-rotate(0deg) brightness(98%) contrast(102%);
 
 /* General - Text */
 h1, h3, p {}
@@ -74,6 +80,7 @@ h1, h3, p {}
 .layer {
   display: flex;
   justify-content: space-between;
+  width: 100%;
   height: 40px;
   line-height: 40px;
 }
@@ -93,11 +100,40 @@ h1, h3, p {}
 .icon {
   height: 20px;
   margin: 10px;
-  filter: $hue-rotate-white;
 }
 
+/* General - Modals */
+.modal-contents {
+  z-index: 3;
+  width: 800px;
+  padding: 30px;
+  border-radius: 5px;
+  background-color: white;
+}
+
+.modal {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: 2;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: hsla(0, 0%, 0%, 0.4);
+}
+
+.clarifier {
+  padding-left: 10px;
+  border-left: 3px solid $theme-green-light;
+}
+
+/* ############################################################################# */
 /* top-bar */
 .top-bar {
+  position: fixed;
+  width: 100vw;
   height: 40px;
   background-color: $theme-green;
 }
@@ -107,17 +143,67 @@ h1, h3, p {}
   filter: $hue-rotate-white;
 }
 
+.display-none {
+  display: none;
+}
+
+.top-bar .icon {
+  filter: $hue-rotate-white;  
+}
+
+/* top-bar - dropdown menu */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+ 
+.dropdown-content {
+  position: absolute;
+  z-index: 1;
+  top: 40px;
+  display: none;
+  background-color: $theme-green-light;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+ 
+.dropdown-content a {
+  display: block;
+  color: white;
+}
+ 
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* ############################################################################# */
 /* side-bar */
 .side-bar {
+  position: fixed;
   overflow: auto;
   width: 250px;
   height: 100vh;
+  margin-top: 40px;
   color: white;
   background-color: $theme-green;
 }
 
+/* ############################################################################# */
 /* main-content */
 .main-content {
   /* 250px for the side-bar and 15px for the scroll bar */
   width: calc(100vw - 250px - 15px);
+  margin: 40px 0px 0px 250px;
+}
+
+.page-nav {
+  display: flex;
+  justify-content: space-between;
+}
+
+.main-content .icon {
+  filter: $hue-rotate-black;  
+}
+
+.visibility-hidden {
+  visibility: hidden;
 }

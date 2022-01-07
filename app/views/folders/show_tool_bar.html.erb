@@ -3,16 +3,29 @@
 </button>
 <button type="submit" 
         name="submission_data" 
-        value="routeToDecoErrorUpdate mark_as_read"
+        value="routeToDecoErrorUpdate"
         form="bulk_action"
         id="mark-as-read-button">
   <%= image_tag("eye.svg", class: "icon") %>
+  <input form="bulk_action" 
+          type="checkbox" 
+          name="deco_error[read]" 
+          value="1"
+          id="mark_as_read"
+          class="display-none">
 </button>
 <button type="submit" 
         name="submission_data" 
-        value="routeToDecoErrorUpdate mark_as_unread"
-        form="bulk_action">
+        value="routeToDecoErrorUpdate"
+        form="bulk_action"
+        id="mark-as-unread-button">
   <%= image_tag("eye-closed.svg", class: "icon") %>
+  <input form="bulk_action" 
+          type="checkbox" 
+          name="deco_error[read]" 
+          value="0"
+          id="mark_as_unread"
+          class="display-none">
 </button>
 <button type="submit" 
         name="submission_data" 

@@ -49,13 +49,38 @@ class BulkActionFormTest < ActionDispatch::IntegrationTest
     assert_template 'folders/show_main_content', 'folders/show_tool_bar'
   end 
 
-  test 'Route to deco error update via the bulk action form submission' do
+  test 'Update true read status via strong params' do
     assert_equal false, DecoError.find(1).read
-    get bulk_action_path, params: { submission_data: 'routeToDecoErrorUpdate mark_as_read',
+    get bulk_action_path, params: { deco_error: {read: "1"},
+                                    submission_data: 'routeToDecoErrorUpdate',
                                     id: ['1', '2'],
                                     controller: 'deco_errors',
                                     action: 'update',
-                                    folder_id: 1}
+                                    folder_id: 1,
+                                    read: true}
     assert_equal true, DecoError.find(1).read
+  end
+
+  test 'Update false read status via strong params' do
+    DecoError.find(1).update(read: true)
+    assert_equal true, DecoError.find(1).read
+    get bulk_action_path, params: { deco_error: {read: "0"},
+                                    submission_data: 'routeToDecoErrorUpdate',
+                                    id: ['1', '2'],
+                                    controller: 'deco_errors',
+                                    action: 'update',
+                                    folder_id: 1,
+                                    read: false}
+    assert_equal false, DecoError.find(1).read
+  end
+
+  test 'Does not break when no deco_error params are entered' do
+    get bulk_action_path, params: { submission_data: 'routeToDecoErrorUpdate',
+                                    id: ['1', '2'],
+                                    controller: 'deco_errors',
+                                    action: 'update',
+                                    folder_id: 1,
+                                    read: false}
+    assert_response :redirect
   end
 end
