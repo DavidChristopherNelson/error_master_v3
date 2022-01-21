@@ -1,4 +1,6 @@
+require 'show_action_variables'
 class RulesController < ApplicationController
+  include ShowActionVariables
   before_action :set_rule, only: %i[show edit update destroy]
 
   # GET /rules
@@ -22,15 +24,14 @@ class RulesController < ApplicationController
   # POST /rules
   # POST /rules.json
   def create
-    @rule = Rule.new(rule_params)
-
+    rule = Rule.create!(rule_params)
+    @filter = Filter.find(rule&.filter_id)
+    filter_show_action_variables
     respond_to do |format|
-      if @rule.save
-        format.html { redirect_to(@rule, notice: 'Rule was successfully created.') }
-        format.json { render(:show, status: :created, location: @rule) }
-      else
-        format.html { render(:new) }
-        format.json { render(json: @rule.errors, status: :unprocessable_entity) }
+      format.js do
+        render(template: '/filters/show.js.erb',
+               layout: false
+              )
       end
     end
   end
@@ -38,13 +39,14 @@ class RulesController < ApplicationController
   # PATCH/PUT /rules/1
   # PATCH/PUT /rules/1.json
   def update
+    @filter = Filter.find(@rule&.filter_id)
+    @rule.update!(rule_params)
+    filter_show_action_variables
     respond_to do |format|
-      if @rule.update(rule_params)
-        format.html { redirect_to(@rule, notice: 'Rule was successfully updated.') }
-        format.json { render(:show, status: :ok, location: @rule) }
-      else
-        format.html { render(:edit) }
-        format.json { render(json: @rule.errors, status: :unprocessable_entity) }
+      format.js do
+        render(template: '/filters/show.js.erb',
+               layout: false
+              )
       end
     end
   end
@@ -52,10 +54,15 @@ class RulesController < ApplicationController
   # DELETE /rules/1
   # DELETE /rules/1.json
   def destroy
-    @rule.destroy!
+    @filter = Filter.find(@rule.first.filter_id)
+    @rule&.each(&:destroy!)
+    filter_show_action_variables
     respond_to do |format|
-      format.html { redirect_to(rules_url, notice: 'Rule was successfully destroyed.') }
-      format.json { head(:no_content) }
+      format.js do
+        render(template: '/filters/show.js.erb',
+               layout: false
+              )
+      end
     end
   end
 
@@ -68,6 +75,6 @@ class RulesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def rule_params
-    params.fetch(:rule, {})
+    params.require(:rule).permit(:filter_id, :field, :value)
   end
 end

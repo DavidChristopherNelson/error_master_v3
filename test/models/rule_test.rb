@@ -1,15 +1,17 @@
-require "test_helper"
+require 'test_helper'
 
 class RuleTest < ActiveSupport::TestCase
   def setup
-    @folder = Folder.create(name: 'Test Folder')
-    @filter = Filter.create(name: 'Test Filter',
-                            execution_order: 1,
-                            logic: '',
-                            folder_id: 1)
+    @folder = Folder.create!(name: 'Test Folder')
+    @filter = Filter.create!(name: 'Test Filter',
+                             execution_order: 1,
+                             logic: '',
+                             folder_id: 1
+                            )
     @rule = Rule.new(field: 'title',
-                      value: 'Bad file descript',
-                      filter_id: 1)
+                     value: 'Bad file descript',
+                     filter_id: 1
+                    )
   end
 
   test 'should be valid' do
@@ -21,9 +23,9 @@ class RuleTest < ActiveSupport::TestCase
   end
 
   test 'value should be present' do
-    @rule.value = ""
+    @rule.value = ''
     assert_not @rule.valid?
-    @rule.value = "           "
+    @rule.value = '           '
     assert_not @rule.valid?
   end
 

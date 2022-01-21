@@ -1,17 +1,15 @@
-<%= form_with(model: rule) do |form| %>
-  <% if rule.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(rule.errors.count, "error") %> prohibited this rule from being saved:</h2>
-
-      <ul>
-        <% rule.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="actions">
-    <%= form.submit %>
+<div class="nested-fields">
+  <%= form.hidden_field :_destroy %>
+  <%= form.hidden_field :filter_id, value: filter.id %>
+  <div>
+    <%= form.label :field %>
+    <%= form.text_field :field %>
   </div>
-<% end %>
+  <div>
+    <%= form.label :value %>
+    <%= form.text_field :value %>
+  </div>
+  <div>
+    <%= link_to "Remove", '#', class: "remove_fields" %>
+  </div>
+</div>

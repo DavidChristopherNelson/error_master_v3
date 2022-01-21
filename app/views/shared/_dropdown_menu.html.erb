@@ -1,0 +1,19 @@
+<div class="dropdown">
+  <%= image_tag("hamburger.svg", class: "icon white") %>
+  <div class="dropdown-content">
+    <div class="layer">
+      <a class="modal-trigger" data-target="#add_deco_error">Create Error</a>
+    </div>
+    <div class="layer">
+      <a class="modal-trigger" data-target="#add_filter">Create Filter</a>
+    </div>
+    <div class="layer">
+      List of Filters
+    </div>
+    <% filters.each do |filter| %>
+      <div id=<%= "#{filter.id}" %> class="layer filter">
+        <%= link_to "#{filter.execution_order}: #{filter.name}", filter, remote: true %>
+      </div>
+    <% end %>
+  </div>
+</div>

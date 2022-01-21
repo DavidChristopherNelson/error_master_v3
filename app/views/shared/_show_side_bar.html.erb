@@ -1,0 +1,42 @@
+<div class="side-bar-contents">
+  <div class="layer">
+    <h1>Folders</h1>
+    <a class="modal-trigger" data-target="#add_folder">
+      <%= image_tag("plus.svg", class: "icon white") %>
+    </a>
+  </div>
+  <% @folders.each do |folder| %>
+    <!-- text and indentation -->
+    <div id="<%= folder.id %>" class="layer folder">
+      <div class="left">
+        <% @folder_display_info[folder.id][:num_of_ancestors].times do |_| %>
+          <div class="indentation"></div>
+        <% end %>
+        <%= link_to folder_path(id: folder.id), remote: true do %>
+          <h3 class="white"><%= "#{folder.name}: " %>
+            <span class="error_count">
+              <%= pluralize(@folder_display_info[folder.id][:num_of_errors], 
+                                   "error") %>
+            </span>
+          </h3>
+        <% end %>
+      </div>
+      <!-- delete button -->
+      <div class="right">
+        <% if folder.user_created %>
+          <%= link_to folder_path(id: folder.id), 
+                      method: :delete,
+                      data: { confirm: "Are you sure?" },
+                      remote: true do %>
+            <%= image_tag("trash.svg", class: "icon white") %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+  <!-- This is a hack to be able to see the last list item when scrolling. -->
+  <div class="layer"></div>
+</div>
+<div class="side-bar-modals">
+    <%= render "/folders/new", folder_new: @folder_new, folders: @folders %>
+</div>

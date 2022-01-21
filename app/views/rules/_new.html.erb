@@ -1,0 +1,36 @@
+<div id="add_rule" class="modal">
+  <div class="modal-contents vertical-container">
+    <div class="layer">
+      <div class="left">
+        <h1> Create rule </h1>
+      </div>
+      <div class="right">
+        <button class="close-modal">
+          <%= image_tag("close.svg", class: "icon black") %>
+        </button>
+      </div>
+    </div>
+    <div class="layer"></div>
+
+    <%= form_with(model: rule, local: false) do |form| %>
+      <%= form.hidden_field :filter_id, value: filter.id %>
+      <div class="layer">
+        <div class="left">
+          <%= form.label :field %>
+          <%= form.select :field, @fields, { selected: @fields[1] } %>
+        </div>
+      </div>
+      <div class="layer">
+        <div class="left">
+          <%= form.label :value %>
+          <%= form.text_field :value %>
+        </div>
+      </div>
+
+      <div class="layer"></div>
+      <div class="layer right">
+        <%= form.submit "Submit", class: "close-modal"  %>
+      </div>
+    <% end %>
+  </div>
+</div>

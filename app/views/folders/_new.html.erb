@@ -1,0 +1,42 @@
+<div id="add_folder" class="modal">
+  <div class="modal-contents vertical-container">
+    <!-- Header -->
+    <div class="layer">
+      <div class="left">
+        <h1> Create folder </h1>
+      </div>
+      <div class="right">
+        <button class="close-modal">
+          <%= image_tag("close.svg", class: "icon black") %>
+        </button>
+      </div>
+    </div>
+    <div class="layer"></div>
+
+    <!-- Main content -->
+    <%= form_with(model: folder_new, local: false) do |form| %>
+      <%= form.hidden_field :user_created, value: true %>
+      <div class="layer">
+        <div class="left"> 
+          <%= form.label :name %>
+          <%= form.text_field :name %>
+        </div>
+      </div>
+      <div class="layer">
+        <div class="left"> 
+        <%= form.label :parent_id %>
+        <%= form.collection_select :parent_id,
+                                    folders.select { |f| f[:user_created] },
+                                    :id,
+                                    :name,
+                                    {prompt: "No parent folder"} %>
+        </div>
+      </div>
+      <!-- Footer -->
+      <div class="layer"></div>
+      <div class="layer right">
+        <%= form.submit "Submit Changes", class: "close-modal" %>
+      </div>
+    <% end %>
+  </div>
+</div>

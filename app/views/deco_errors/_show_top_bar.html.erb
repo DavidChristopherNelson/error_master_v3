@@ -1,0 +1,14 @@
+<div class="left">
+  <%= image_tag("logo_text_horizontal_black.svg", class: "logo white") %>
+  <%= render "/shared/dropdown_menu", filters: @filters  %>
+  <%= link_to folder_path(id: @folder.id), remote: true do %>
+    <%= image_tag("chevron-left.svg", class: "icon white") %>
+  <% end %>
+  <h1 class="white"> 
+    <%= @deco_error.title %>
+  </h1>
+</div>
+<div class="top-bar-modals">
+    <%= render "/deco_errors/new" %>
+    <%= render "/filters/new", filter_new: @filter_new, folders: @folders %> 
+</div>

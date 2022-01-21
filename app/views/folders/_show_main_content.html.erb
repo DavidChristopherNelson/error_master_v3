@@ -1,10 +1,18 @@
-<div class="layer title">
-  <h1><%= @folder.name %></h1>
+<div class="layer">
+  <div class="left">
+    <h1><%= @folder.name %></h1>
+    <% if @folder&.user_created %>
+      <a class="modal-trigger" data-target="#edit_folder">
+        <%= image_tag("pen.svg", class: "icon black") %>
+      </a>
+      <%= render "edit", folder: @folder, folders: @folders %>
+    <% end %>
+  </div>
 </div>
 <%= form_with url: "bulk_action", 
-                    method: :get, 
-                    id: "bulk_action", 
-                    local: false do |form| %>
+              method: :get, 
+              id: "bulk_action", 
+              local: false do |form| %>
   <%= form.hidden_field :folder_id, value: @folder.id %>
   <% @deco_errors.each do |deco_error| %>
     <div class="layer horizontal-container">
@@ -14,32 +22,36 @@
              name="id[]" 
              id="id_<%= "#{deco_error.id}" %>"
              class="error-checkbox">
-        <h3><%= deco_error.title %></h3>
+        <%= link_to deco_error_path(id: deco_error.id), remote: true do %>
+          <h3><%= deco_error.title %></h3>
+        <% end %>
         <p><%= " read: #{deco_error.read}" %></p>
       </div>
     </div>
   <% end %>
 <% end %>
+
+<!-- Page Navigation -->
 <div class="layer">
   <div></div>
   <div class="page-nav">
-    <% if @page_num.to_i == 0 %>
+    <% if @page_number.to_i == 0 %>
       <%= image_tag "chevron-left.svg", class: "icon visibility-hidden" %>
     <% else %>
       <%= link_to folder_path(id: @folder.id, 
-                              move_to_page: @page_num.to_i - 1),
+                              move_to_page: @page_number.to_i - 1),
                   remote: true do %>
         <%= image_tag "chevron-left.svg", class: "icon" %>
       <% end %>
     <% end %>
     <div class="page-number">
-      <%= "#{@page_num} of #{@max_page_num}" %>
+      <%= "#{@page_number} of #{@max_page_num}" %>
     </div>
-    <% if @page_num.to_i == @max_page_num %>
+    <% if @page_number.to_i == @max_page_num %>
       <%= image_tag "chevron-right.svg", class: "icon visibility-hidden" %>
     <% else %>
       <%= link_to folder_path(id: @folder.id, 
-                              move_to_page: @page_num.to_i + 1),
+                              move_to_page: @page_number.to_i + 1),
                   remote: true do %>
         <%= image_tag "chevron-right.svg", class: "icon" %>
       <% end %>
@@ -47,6 +59,3 @@
   </div>
   <div></div>
 </div>
-<%= render 'shared/modal' %>
-
-<%= javascript_pack_tag "folder_listener.js" %>

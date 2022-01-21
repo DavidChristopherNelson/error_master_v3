@@ -1,0 +1,63 @@
+<div class="layer">
+  <div class="left">
+    <h1><%= @filter.name %></h1>
+    <%= link_to filter_path(id: @filter.id), 
+                method: :delete,
+                data: { confirm: "Are you sure?" },
+                remote: true do %>
+      <%= image_tag("trash.svg", class: "icon black") %>
+    <% end %>
+  </div>
+</div>
+<%= render "filters/edit", 
+           filter: @filter, 
+           folder: @folder, 
+           folders: @folders %>
+
+<!-- Rule section -->
+<!-- Rule top bar -->
+<div class="layer">
+  <div class="left"> 
+    <h1>Rules</h1>
+    <button class="check-all">
+      <%= image_tag("check-all.svg", class: "icon") %>
+    </button>
+    <button type="submit" 
+            name="submission_data" 
+            value="routeToRuleDestroy"
+            form="bulk_action">
+      <%= image_tag("trash.svg", class: "icon black") %>
+    </button>
+    <a class="modal-trigger" data-target="#add_rule" >
+      <%= image_tag("plus.svg", class: "icon") %>
+    </a>
+    <%= render "/rules/new", rule: @rule, filter: @filter %>
+  </div>
+</div>
+
+<!-- Rule main content -->
+<%= form_with url: "bulk_action",
+                    method: :get,
+                    id: "bulk_action", 
+                    local: false do |form| %>
+<% end %>
+<% @rules.each do |rule| %>
+  <div class="layer">
+    <div class="left">
+      <input type="checkbox" 
+             value=<%= "#{rule.id}" %> 
+             name="id[]" 
+             id="id_<%= "#{rule.id}" %>"
+             class="error-checkbox"
+             form="bulk_action">
+      <h3>
+        <%= "Rule ID #{rule.id} matches '#{rule.value}' to error field 
+             '#{rule.field}'" %>
+      </h3>
+      <a class="modal-trigger" data-target=<%= "#edit_rule_#{rule.id}" %>>
+        <%= image_tag("pen.svg", class: "icon") %>
+      </a>
+      <%= render "/rules/edit", rule: rule %>
+    </div>
+  </div>
+<% end %>

@@ -1,4 +1,6 @@
+require 'show_action_variables'
 class FiltersController < ApplicationController
+  include ShowActionVariables
   before_action :set_filter, only: %i[show edit update destroy]
 
   # GET /filters
@@ -9,11 +11,22 @@ class FiltersController < ApplicationController
 
   # GET /filters/1
   # GET /filters/1.json
-  def show; end
+  def show
+    filter_show_action_variables
+
+    respond_to do |format|
+      format.js do
+        render(template: '/filters/show.js.erb',
+               layout: false
+              )
+      end
+    end
+  end
 
   # GET /filters/new
   def new
     @filter = Filter.new
+    filter_show_action_variables
   end
 
   # GET /filters/1/edit
@@ -22,15 +35,14 @@ class FiltersController < ApplicationController
   # POST /filters
   # POST /filters.json
   def create
-    @filter = Filter.new(filter_params)
+    @filter = Filter.create!(filter_params)
+    filter_show_action_variables
 
     respond_to do |format|
-      if @filter.save
-        format.html { redirect_to(@filter, notice: 'Filter was successfully created.') }
-        format.json { render(:show, status: :created, location: @filter) }
-      else
-        format.html { render(:new) }
-        format.json { render(json: @filter.errors, status: :unprocessable_entity) }
+      format.js do
+        render(template: '/filters/show.js.erb',
+               layout: false
+              )
       end
     end
   end
@@ -38,13 +50,14 @@ class FiltersController < ApplicationController
   # PATCH/PUT /filters/1
   # PATCH/PUT /filters/1.json
   def update
+    @filter.update!(filter_params)
+    filter_show_action_variables
+
     respond_to do |format|
-      if @filter.update(filter_params)
-        format.html { redirect_to(@filter, notice: 'Filter was successfully updated.') }
-        format.json { render(:show, status: :ok, location: @filter) }
-      else
-        format.html { render(:edit) }
-        format.json { render(json: @filter.errors, status: :unprocessable_entity) }
+      format.js do
+        render(template: '/filters/show.js.erb',
+               layout: false
+              )
       end
     end
   end
@@ -53,9 +66,15 @@ class FiltersController < ApplicationController
   # DELETE /filters/1.json
   def destroy
     @filter.destroy!
+    @folder = Folder.find(1)
+    folder_show_action_variables
+
     respond_to do |format|
-      format.html { redirect_to(filters_url, notice: 'Filter was successfully destroyed.') }
-      format.json { head(:no_content) }
+      format.js do
+        render(template: '/folders/show.js.erb',
+               layout: false
+              )
+      end
     end
   end
 
@@ -68,6 +87,11 @@ class FiltersController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def filter_params
-    params.fetch(:filter, {})
+    params.require(:filter).permit(:folder_id,
+                                   :name,
+                                   :execution_order,
+                                   :logic,
+                                   rules_attributes: %i[filter_id field value]
+                                  )
   end
 end

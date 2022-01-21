@@ -7,14 +7,14 @@
 
 namespace :deploy do
   desc 'Push to Github'
-  task :github, [:message] do |_t, parameter|
+  task github: :environment, [:message] do |_t, parameter|
     system 'git add -A'
     system "git commit -m \"#{parameter[:message]}\""
     system 'git push'
   end
 
   desc 'Deploy to Heroku'
-  task :heroku, [:message] do |_t, parameter|
+  task heroku: :environment, [:message] do |_t, parameter|
     system 'git add -A'
     system "git commit -m \"#{parameter[:message]}\""
     system 'git push'

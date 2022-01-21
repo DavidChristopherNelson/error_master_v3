@@ -1,0 +1,62 @@
+<div class="top-bar-contents horizontal-container">
+  <div class="left">
+    <%= image_tag("logo_text_horizontal_black.svg", class: "logo white") %>
+    <%= render "/shared/dropdown_menu", filters: @filters  %>
+    <button class="check-all">
+      <%= image_tag("check-all.svg", class: "icon white") %>
+    </button>
+    <button type="submit" 
+            name="submission_data" 
+            value="routeToDecoErrorUpdate"
+            form="bulk_action"
+            id="mark-as-read-button">
+      <%= image_tag("eye.svg", class: "icon white") %>
+      <input form="bulk_action" 
+              type="checkbox" 
+              name="deco_error[read]" 
+              value="1"
+              id="mark_as_read"
+              class="display-none">
+    </button>
+    <button type="submit" 
+            name="submission_data" 
+            value="routeToDecoErrorUpdate"
+            form="bulk_action"
+            id="mark-as-unread-button">
+      <%= image_tag("eye-closed.svg", class: "icon white") %>
+      <input form="bulk_action" 
+              type="checkbox" 
+              name="deco_error[read]" 
+              value="0"
+              id="mark_as_unread"
+              class="display-none">
+    </button>
+    <button type="submit" 
+            name="submission_data" 
+            value="routeToDecoErrorDestroy"
+            form="bulk_action">
+      <%= image_tag("trash.svg", class: "icon white") %>
+    </button>
+    <%= link_to folder_path(id: @folder.id, rule_engine: true), remote: true do %>
+      <%= image_tag("rule-engine.svg", class: "icon white") %>
+    <% end %>
+  </div>
+
+  <!-- Search bar -->
+  <%= form_with(url: "/folders/#{@folder&.id}", 
+                method: :get, 
+                class: "search-bar right",
+                local: false) do |form| %>
+    <%= form.text_field :value %>
+    <%= form.select :field, @fields, 
+                    selected: "title" %>
+    <%= form.submit "Search", 
+                    type: :image, 
+                    src: image_path("search.svg"),
+                    class: "icon black" %>
+  <% end %>
+</div>
+<div class="top-bar-modals">
+    <%= render "/deco_errors/new" %>
+    <%= render "/filters/new", filter_new: @filter_new, folders: @folders %> 
+</div>

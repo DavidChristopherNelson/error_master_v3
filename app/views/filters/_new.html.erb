@@ -1,0 +1,57 @@
+<div id="add_filter" class="modal">
+  <div class="modal-contents vertical-container">
+    <div class="layer">
+      <div class="left">
+        <h1> Create filter </h1>
+      </div>
+      <div class="right">
+        <button class="close-modal">
+          <%= image_tag("close.svg", class: "icon black") %>
+        </button>
+      </div>
+    </div>
+    <div class="layer"></div>
+
+    <%= form_with(model: filter_new, local: false) do |form| %>
+      <div class="layer">
+        <div class="left"> 
+          <%= form.label :folder_id %>
+          <%= form.collection_select :folder_id,
+                                     folders.select { |f| f[:id] > 2 },
+                                     :id,
+                                     :name %>
+        </div>
+      </div>
+      <div class="layer">
+        <div class="left"> 
+          <%= form.label :name %>
+          <%= form.text_field :name %>
+        </div>
+      </div>
+      <div class="layer">
+        <div class="left"> 
+          <%= form.label :execution_order %>
+          <%= form.number_field :execution_order %>
+        </div>
+      </div>
+      <div class="layer">
+        <div class="left"> 
+          <%= form.label :logic %>
+          <%= form.text_field :logic %>
+        </div>
+      </div>
+      <div class="clarifier">
+        To code the filter logic combine Ruby logic operators (&&, || and !) 
+        with rule ids.<br>
+        For example the code (2&&1&&!3)||4 will select for errors that match 
+        the rule with id 2 and rule 1 but not rule 3, if that doesn't match
+        then it tries to match with rule 4.
+      </div>
+      <div class="layer"></div>
+      <div class="layer right">
+        <%= form.submit "Submit Changes", class: "close-modal"  %>
+      </div>
+
+    <% end %>
+  </div>
+</div>

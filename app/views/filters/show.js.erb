@@ -1,0 +1,58 @@
+// AJAX Functionality
+function insert_into_main_content(content) {
+  var main_content_tag = document.querySelector(".main-content");
+  main_content_tag.innerHTML = "";
+  main_content_tag.insertAdjacentHTML('afterbegin', content)
+}
+
+function insert_into_top_bar(content) {
+  var top_bar_tag = document.querySelector(".top-bar");
+  top_bar_tag.innerHTML = "";
+  top_bar_tag.insertAdjacentHTML('afterbegin', content)
+}
+
+function insert_into_side_bar(content) {
+  var side_bar_tag = document.querySelector(".side-bar");
+  side_bar_tag.innerHTML = "";
+  side_bar_tag.insertAdjacentHTML('afterbegin', content)
+}
+
+insert_into_main_content(
+  "<%= escape_javascript( render "filters/show_main_content" ) %>"
+)
+insert_into_top_bar(
+  "<%= escape_javascript( render "filters/show_top_bar" ) %>"
+)
+insert_into_side_bar(
+  "<%= escape_javascript( render "shared/show_side_bar" ) %>"
+)
+
+// Modal Functionality
+// Show modal
+var modal_triggers = document.querySelectorAll(".modal-trigger");
+modal_triggers.forEach(function(modal_trigger) {
+  modal_trigger.addEventListener("click", function() {
+    var modal = document.querySelector(`${this.dataset.target}`);
+    modal.style.display = "flex";
+  });
+});
+
+// Close modal
+var close_modal = document.querySelectorAll(".close-modal");
+close_modal.forEach(function(close) {
+  close.addEventListener("click", function() {
+    var modals = document.querySelectorAll(".modal");
+    modals.forEach(function(modal) {
+      modal.style.display = "none";
+    });
+  });
+});
+
+// Bulk Action Functionality
+// Check all button 
+var check_all_button = document.querySelector(".check-all");
+check_all_button.addEventListener("click", (event) => {
+  document.querySelectorAll('input[class=error-checkbox]').forEach(function(checkbox) {
+    checkbox.click();
+  });
+});

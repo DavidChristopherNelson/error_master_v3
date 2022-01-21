@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_05_063948) do
+ActiveRecord::Schema.define(version: 2022_01_12_043132) do
 
   create_table "deco_errors", force: :cascade do |t|
     t.text "title"
@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(version: 2022_01_05_063948) do
     t.integer "parent_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "user_created"
     t.index ["name"], name: "index_folders_on_name", unique: true
     t.index ["parent_id"], name: "index_folders_on_parent_id"
   end

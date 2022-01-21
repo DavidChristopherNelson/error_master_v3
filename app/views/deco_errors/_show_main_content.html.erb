@@ -1,0 +1,32 @@
+<% @deco_error_display_info.each do |category| %>
+  <% category[:contents].each do |field_info| %>
+    <div class="deco-error-layer">
+      <% if field_info == category[:contents].first %>
+        <div class="category"> <%= category[:title] %> </div>
+      <% else %>
+        <div class="category-no-border"></div>
+      <% end %>
+      <% if field_info[:field] == :action %>
+        </div>
+        <% next %>
+      <% elsif field_info[:field] == :controller %>
+        <div class="field-title">
+          Controller#Action
+        </div>
+        <div class="field-data">
+          <% unless @deco_error[:controller] == nil %>
+            <%= "#{@deco_error[:controller]}##{@deco_error[:action]}" %>
+          <% end %>
+        </div>
+        </div>
+        <% next %>
+      <% end %>
+      <div class="field-title">
+        <%= field_info[:descriptor] %>
+      </div>
+      <div class="field-data">
+        <%= @deco_error[field_info[:field]] %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

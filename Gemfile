@@ -5,8 +5,8 @@ gem 'bootsnap',   '1.7.2', require: false
 gem 'jbuilder',   '2.10.0'
 gem 'puma',       '5.3.1'
 gem 'rails',      '6.1.4.1'
-gem 'sass-rails', '6.0.0'
-gem 'turbolinks', '5.2.1'
+gem 'sass-rails'
+gem 'turbolinks', '5.0.1'
 gem 'webpacker',  '5.4.0'
 
 group :development, :test do

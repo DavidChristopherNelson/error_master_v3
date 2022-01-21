@@ -1,35 +1,15 @@
-<div class="wrapper vetical-container">
-  <div class="top-bar horizontal-container">
-    <%= image_tag("logo_text_horizontal_black.svg", class: "logo") %>
-    <%= render 'shared/dropdown' %>
-    <div class="tool-bar">
-    </div>
+<div class="wrapper">
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <%= render "/shared/show_top_bar" %>
   </div>
   <div class="horizontal-container">
-    <div class="side-bar vertical-container">
-      <div class="layer">
-        <h1>Folders</h1>
-      </div>
-      <% @folders.each do |folder| %>
-        <div id="<%= folder.id %>" class="layer folder">
-          <div class="left">
-            <%= link_to folder_path(id: folder.id, current_page: 4), remote: true do %>
-              <h3><%= "#{folder.name}: " %>
-                <span class="error_count">
-                  <% if folder.deco_errors.count == 1 %>
-                    <%= "1 error" %>
-                  <% else %>
-                    <%= "#{folder.deco_errors.count} errors" %>
-                  <% end %>
-                </span>
-              </h3>
-            <% end %>
-          </div>
-        </div>
-      <% end %>
+    <!-- Side Bar -->
+    <div class="side-bar">
+      <%= render "/shared/show_side_bar" %>
     </div>
-    <div class="main-content vertical-container">
+    <!-- Main Content -->
+    <div class="main-content">
     </div>
   </div>
 </div>
-<%= javascript_pack_tag "ajax_listeners.js" %>
