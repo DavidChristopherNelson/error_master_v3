@@ -3,7 +3,7 @@
     <div class="left">
       <%= form.label :folder_id %>
       <%= form.collection_select :folder_id,
-                                 folders.select { |f| f[:id] > 2 },,
+                                 folders.select { |f| f[:id] > 2 },
                                  :id,
                                  :name,
                                  value: folder %>
