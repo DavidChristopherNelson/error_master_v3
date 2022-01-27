@@ -1,3 +1,4 @@
+<!-- This partial is not currently being used. Consider deleting it. -->
 <div class="top-bar-contents horizontal-container">
   <div class="left">
     <%= image_tag("logo_text_horizontal_black.svg", class: "logo white") %>
@@ -6,6 +7,10 @@
   <div class="right"></div>
 </div>
 <div class="top-bar-modals">
-    <%= render "/deco_errors/new" %>
-    <%= render "/filters/new", filter_new: @filter_new, folders: @folders %> 
+  <%= render partial: "/shared/modal", 
+             locals: {modal_id: "new-filter",
+                      form_id: "new-filter-form",
+                      title: "Create filter",
+                      form_path: "filters/new",
+                      form_params: @new_filter_form_params} %>
 </div>

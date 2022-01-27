@@ -56,11 +56,6 @@ Template for ordering css properties
   box-sizing: border-box;
 }
 
-button {
-  background-color: transparent;
-  border: none;
-}
-
 /* General - Color Variables */
 $theme-green: #2b3f27; //20% light
 $theme-green-dark: #152013; //10% light
@@ -159,7 +154,7 @@ input[type="text"], select {
   padding-left: 10px;
   border: 1px solid $theme-green-very-light;
   border-radius: 5px;
-  margin-top: 8px;
+  margin-top: 5px;
   background-color: white;
 }
 
@@ -169,8 +164,9 @@ input[type="number"] {
   padding-left: 10px;
   border: 1px solid $theme-green-very-light;
   border-radius: 5px;
-  margin-top: 8px;
+  margin-top: 5px;
 }
+
 
 input[type="checkbox"] {
   width: 20px;
@@ -193,6 +189,16 @@ input[type="submit"]:hover {
   background-color: $theme-green-light;
 }
 
+.field_with_errors input[type="text"], 
+.field_with_errors select,
+.field_with_errors input[type="number"],
+.field_with_errors input[type="checkbox"],
+.field_with_errors input[type="submit"]
+ {
+  border: 2px solid #ff0000;
+  background-color: #ff9999;
+}
+
 label {
   width: 200px;
 }
@@ -201,6 +207,12 @@ label {
   padding-left: 10px;
   border-left: 3px solid $theme-green-light;
   margin-left: 10px;
+}
+
+/* General - Buttons */
+button {
+  background-color: transparent;
+  border: none;
 }
 
 /* ############################################################################# */

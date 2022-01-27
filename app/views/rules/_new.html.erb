@@ -1,36 +1,36 @@
-<div id="add_rule" class="modal">
-  <div class="modal-contents vertical-container">
-    <div class="layer">
-      <div class="left">
-        <h1> Create rule </h1>
-      </div>
-      <div class="right">
-        <button class="close-modal">
-          <%= image_tag("close.svg", class: "icon black") %>
-        </button>
-      </div>
+<%= form_with(model: form_params[:rule], local: false) do |form| %>
+  <%= form.hidden_field :filter_id, value: form_params[:filter].id %>
+  <% if form_params[:rule].errors.any? %>
+    <div id="error_explanation">
+      <h2>
+        <%= pluralize(form_params[:rule].errors.count, "error") %> 
+        prohibited this folder from being saved.
+      </h2>
+
+      <ul>
+        <% form_params[:rule].errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
     </div>
-    <div class="layer"></div>
-
-    <%= form_with(model: rule, local: false) do |form| %>
-      <%= form.hidden_field :filter_id, value: filter.id %>
-      <div class="layer">
-        <div class="left">
-          <%= form.label :field %>
-          <%= form.select :field, @fields, { selected: @fields[1] } %>
-        </div>
-      </div>
-      <div class="layer">
-        <div class="left">
-          <%= form.label :value %>
-          <%= form.text_field :value %>
-        </div>
-      </div>
-
-      <div class="layer"></div>
-      <div class="layer right">
-        <%= form.submit "Submit", class: "close-modal"  %>
-      </div>
-    <% end %>
+  <% end %>
+  <div class="layer">
+    <div class="left">
+      <%= form.label :field %>
+      <%= form.select :field, 
+                      form_params[:fields], 
+                      { selected: form_params[:fields][1] } %>
+    </div>
   </div>
-</div>
+  <div class="layer">
+    <div class="left">
+      <%= form.label :value %>
+      <%= form.text_field :value %>
+    </div>
+  </div>
+
+  <div class="layer"></div>
+  <div class="layer right">
+    <%= form.submit "Submit", class: "close-modal"  %>
+  </div>
+<% end %>

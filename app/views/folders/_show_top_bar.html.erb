@@ -58,5 +58,10 @@
 </div>
 <div class="top-bar-modals">
     <%= render "/deco_errors/new" %>
-    <%= render "/filters/new", filter_new: @filter_new, folders: @folders %> 
+    <%= render partial: "/shared/modal", 
+               locals: {modal_id: "new-filter",
+                        form_id: "new-filter-form",
+                        title: "Create filter",
+                        form_path: "filters/new",
+                        form_params: @new_filter_form_params} %>
 </div>

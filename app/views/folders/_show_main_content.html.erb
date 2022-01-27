@@ -2,10 +2,16 @@
   <div class="left">
     <h1><%= @folder.name %></h1>
     <% if @folder&.user_created %>
-      <a class="modal-trigger" data-target="#edit_folder">
+      <a class="modal-trigger" data-target="#edit-folder">
         <%= image_tag("pen.svg", class: "icon black") %>
       </a>
-      <%= render "edit", folder: @folder, folders: @folders %>
+      <%= render partial: "/shared/modal", 
+                 locals: {modal_id: "edit-folder",
+                          form_id: "edit-folder-form",
+                          title: "Edit folder",
+                          form_path: "folders/edit",
+                          form_params: {folder: @folder,
+                                       folders: @folders}} %>
     <% end %>
   </div>
 </div>

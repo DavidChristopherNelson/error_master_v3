@@ -35,14 +35,27 @@ class FiltersController < ApplicationController
   # POST /filters
   # POST /filters.json
   def create
-    @filter = Filter.create!(filter_params)
+    @filter = Filter.new(filter_params)
     filter_show_action_variables
 
     respond_to do |format|
-      format.js do
-        render(template: '/filters/show.js.erb',
-               layout: false
-              )
+      if @filter.save
+        format.js do
+          render(template: '/filters/show.js.erb',
+                 layout: false
+                )
+        end
+      else
+        @failed_resource = @filter
+        @form_params = {
+          filter_new: @filter,
+          folders: @folders
+        }
+        format.js do
+          render(template: '/shared/form_submit_failure',
+                 layout: false
+                )
+        end
       end
     end
   end
@@ -50,14 +63,23 @@ class FiltersController < ApplicationController
   # PATCH/PUT /filters/1
   # PATCH/PUT /filters/1.json
   def update
-    @filter.update!(filter_params)
     filter_show_action_variables
 
     respond_to do |format|
-      format.js do
-        render(template: '/filters/show.js.erb',
-               layout: false
-              )
+      if @filter.update(filter_params)
+        format.js do
+          render(template: '/filters/show.js.erb',
+                 layout: false
+                )
+        end
+      else
+        @failed_resource = @filter
+        @form_params = @edit_filter_form_params
+        format.js do
+          render(template: '/shared/form_submit_failure',
+                 layout: false
+                )
+        end
       end
     end
   end

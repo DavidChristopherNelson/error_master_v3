@@ -24,14 +24,26 @@ class RulesController < ApplicationController
   # POST /rules
   # POST /rules.json
   def create
-    rule = Rule.create!(rule_params)
-    @filter = Filter.find(rule&.filter_id)
+    @rule = Rule.new(rule_params)
+    @filter = Filter.find(@rule&.filter_id)
     filter_show_action_variables
+
     respond_to do |format|
-      format.js do
-        render(template: '/filters/show.js.erb',
-               layout: false
-              )
+      if @rule.save
+        format.js do
+          render(template: '/filters/show.js.erb',
+                 layout: false
+                )
+        end
+      else
+        @failed_resource = @rule
+        @form_params = @new_rule_form_params
+        @form_params[:rule] = @rule
+        format.js do
+          render(template: '/shared/form_submit_failure',
+                 layout: false
+                )
+        end
       end
     end
   end
@@ -40,13 +52,23 @@ class RulesController < ApplicationController
   # PATCH/PUT /rules/1.json
   def update
     @filter = Filter.find(@rule&.filter_id)
-    @rule.update!(rule_params)
-    filter_show_action_variables
     respond_to do |format|
-      format.js do
-        render(template: '/filters/show.js.erb',
-               layout: false
-              )
+      filter_show_action_variables
+      if @rule.update(rule_params)
+        format.js do
+          render(template: '/filters/show.js.erb',
+                 layout: false
+                )
+        end
+      else
+        @failed_resource = @rule
+        @edit_rule_form_params[@rule.id.to_s][:rule] = @rule
+        @form_params = @edit_rule_form_params[@rule.id.to_s]
+        format.js do
+          render(template: '/shared/form_submit_failure',
+                 layout: false
+                )
+        end
       end
     end
   end

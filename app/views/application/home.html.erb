@@ -1,12 +1,24 @@
 <div class="wrapper">
+  <div class="landing-page">
+  </div>
   <!-- Top Bar -->
   <div class="top-bar">
-    <%= render "/shared/show_top_bar" %>
+    <div class="top-bar-contents horizontal-container">
+      <div class="left">
+        <%= image_tag("logo_text_horizontal_black.svg", class: "logo white") %>
+      </div>
+      <div class="right">
+        <button>
+          <%= link_to "/folders/1", remote: true do |_| %>
+            VIEW DEMO
+          <% end %>
+        </button>
+      </div>
+    </div>
   </div>
   <div class="horizontal-container">
     <!-- Side Bar -->
     <div class="side-bar">
-      <%= render "/shared/show_side_bar" %>
     </div>
     <!-- Main Content -->
     <div class="main-content">

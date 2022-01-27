@@ -6,18 +6,18 @@
 # --app error-master-demo
 
 namespace :deploy do
-  desc "Push to Github"
-  task :github, [:message] do |t, parameter|
-    system "git add -A"
+  desc 'Push to Github'
+  task :github, [:message] do |_t, parameter|
+    system 'git add -A'
     system "git commit -m \"#{parameter[:message]}\""
-    system "git push"
+    system 'git push'
   end
 
-  desc "Deploy to Heroku"
-  task :heroku, [:message] do |t, parameter|
-    system "git add -A"
+  desc 'Deploy to Heroku'
+  task :heroku, [:message] do |_t, parameter|
+    system 'git add -A'
     system "git commit -m \"#{parameter[:message]}\""
-    system "git push"
-    system "git push heroku main"
+    system 'git push'
+    system 'git push heroku main'
   end
 end

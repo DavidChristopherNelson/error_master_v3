@@ -1,30 +1,45 @@
-<%= form_with model: filter, local: false do |form| %>
+<%= form_with model: form_params[:filter], local: false do |form| %>
+  <% if form_params[:filter].errors.any? %>
+    <div id="error_explanation">
+      <h2>
+        <%= pluralize(form_params[:filter].errors.count, "error") %> 
+        prohibited this folder from being saved.
+      </h2>
+
+      <ul>
+        <% form_params[:filter].errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
   <div class="layer">
     <div class="left">
       <%= form.label :folder_id %>
       <%= form.collection_select :folder_id,
-                                 folders.select { |f| f[:id] > 2 },
+                                 form_params[:folders].select { |f| f[:id] > 2 },
                                  :id,
                                  :name,
-                                 value: folder %>
+                                 value: form_params[:folder] %>
     </div>
   </div>
   <div class="layer">
     <div class="left"> 
       <%= form.label :name %>
-      <%= form.text_field :name, value: filter.name %>
+      <%= form.text_field :name, value: form_params[:filter].name %>
     </div>
   </div>
   <div class="layer left">
     <div class="left">
       <%= form.label :execution_order %>
-      <%= form.number_field :execution_order, value: filter.execution_order %>
+      <%= form.number_field :execution_order, 
+                            value: form_params[:filter].execution_order %>
     </div>
   </div>
   <div class="layer left">
     <div class="left">
       <%= form.label :logic %>
-      <%= form.text_field :logic, value: filter.logic %>
+      <%= form.text_field :logic, value: form_params[:filter].logic %>
     </div>
   </div>
   <div class="clarifier">

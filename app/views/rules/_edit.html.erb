@@ -1,34 +1,34 @@
-<div id=<%= "edit_rule_#{rule.id}" %> class="modal">
-  <div class="modal-contents vertical-container">
-    <div class="layer">
-      <div class="left">
-        <h1> Edit rule </h1>
-      </div>
-      <div class="right">
-        <button class="close-modal">
-          <%= image_tag("close.svg", class: "icon") %>
-        </button>
-      </div>
-    </div>
-    <div class="layer"></div>
+<%= form_with model: form_params[:rule], local: false do |form| %>
+  <% if form_params[:rule].errors.any? %>
+    <div id="error_explanation">
+      <h2>
+        <%= pluralize(form_params[:rule].errors.count, "error") %> 
+        prohibited this folder from being saved.
+      </h2>
 
-    <%= form_with model: rule, local: false do |form| %>
-      <div class="layer">
-        <div class="left">
-          <%= form.label :field %>
-          <%= form.select :field, @fields, { selected: rule.field } %>
-        </div>
-      </div>
-      <div class="layer">
-        <div class="left">
-          <%= form.label :value %>
-          <%= form.text_field :value, value: rule.value %>
-        </div>
-      </div>
-      <div class="layer"></div>
-      <div class="layer right">
-        <%= form.submit "Submit" %>
-      </div>
-    <% end %>
+      <ul>
+        <% form_params[:rule].errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="layer">
+    <div class="left">
+      <%= form.label :field %>
+      <%= form.select :field, 
+                      form_params[:fields], 
+                      { selected: form_params[:rule].field } %>
+    </div>
   </div>
-</div>
+  <div class="layer">
+    <div class="left">
+      <%= form.label :value %>
+      <%= form.text_field :value, value: form_params[:rule].value %>
+    </div>
+  </div>
+  <div class="layer"></div>
+  <div class="layer right">
+    <%= form.submit "Submit" %>
+  </div>
+<% end %>

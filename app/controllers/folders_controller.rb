@@ -37,14 +37,27 @@ class FoldersController < ApplicationController
   # POST /folders
   # POST /folders.json
   def create
-    @folder = Folder.create!(folder_params)
+    @folder = Folder.new(folder_params)
     folder_show_action_variables
 
     respond_to do |format|
-      format.js do
-        render(template: '/folders/show.js.erb',
-               layout: false
-              )
+      if @folder.save
+        format.js do
+          render(template: '/folders/show.js.erb',
+                 layout: false
+                )
+        end
+      else
+        @failed_resource = @folder
+        @form_params = {
+          folder_new: @folder,
+          folders: @folders
+        }
+        format.js do
+          render(template: '/shared/form_submit_failure',
+                 layout: false
+                )
+        end
       end
     end
   end
@@ -52,14 +65,26 @@ class FoldersController < ApplicationController
   # PATCH/PUT /folders/1
   # PATCH/PUT /folders/1.json
   def update
-    @folder.update!(folder_params)
     folder_show_action_variables
 
     respond_to do |format|
-      format.js do
-        render(template: '/folders/show.js.erb',
-               layout: false
-              )
+      if @folder.update(folder_params)
+        format.js do
+          render(template: '/folders/show.js.erb',
+                 layout: false
+                )
+        end
+      else
+        @failed_resource = @folder
+        @form_params = {
+          folder: @folder,
+          folders: @folders
+        }
+        format.js do
+          render(template: '/shared/form_submit_failure',
+                 layout: false
+                )
+        end
       end
     end
   end

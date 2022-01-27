@@ -1,11 +1,9 @@
+require 'show_action_variables'
 class ApplicationController < ActionController::Base
+  include ShowActionVariables
+
   def home
-    @folder_display_info = Folder.display_info
-    @folders = Folder.hierarchy_order
-    @folder = Folder.new
-    @filters = Filter.order(:execution_order)
-    @filter = Filter.new
-    @deco_error = DecoError.new
+    home_show_action_variables
   end
 
   def run_rule_engine; end

@@ -1,0 +1,27 @@
+<% if @failed_resource.id %>
+  <% class_name = @failed_resource.class.to_s.downcase %>
+  <% form_path = "/#{class_name.pluralize}/edit" %>
+  <% modal_selector = "#edit-#{class_name}" %>
+  <% modal_title = "Edit #{class_name}" %>
+  <% if @failed_resource.class == Rule %>
+    <% form_id = "#edit-#{class_name}-#{@failed_resource.id}-form" %>
+  <% else %>
+    <% form_id = "#edit-#{class_name}-form" %>
+  <% end %>
+<% else %>
+  <% class_name = @failed_resource.class.to_s.downcase %>
+  <% form_id = "#new-#{class_name}-form" %>
+  <% form_path = "/#{class_name.pluralize}/new" %>
+  <% modal_selector = "#new-#{class_name}" %>
+  <% modal_title = "Create #{class_name}" %>
+<% end %>
+
+var form_tag = document.querySelector("<%= form_id %>");
+form_tag.innerHTML = "";
+form_tag.insertAdjacentHTML('afterbegin', 
+                            "<%= escape_javascript( 
+               render partial: form_path, 
+                      locals: {form_params: @form_params} ) %>");
+
+var modal = document.querySelector("<%= modal_selector %>");
+modal.style.display = "flex";

@@ -1,7 +1,7 @@
 <div class="side-bar-contents">
   <div class="layer">
     <h1>Folders</h1>
-    <a class="modal-trigger" data-target="#add_folder">
+    <a class="modal-trigger" data-target="#new-folder">
       <%= image_tag("plus.svg", class: "icon white") %>
     </a>
   </div>
@@ -38,5 +38,10 @@
   <div class="layer"></div>
 </div>
 <div class="side-bar-modals">
-    <%= render "/folders/new", folder_new: @folder_new, folders: @folders %>
+    <%= render partial: "/shared/modal", 
+               locals: {modal_id: "new-folder",
+                        form_id: "new-folder-form",
+                        title: "Create folder",
+                        form_path: "folders/new",
+                        form_params: @new_folder_form_params} %>
 </div>

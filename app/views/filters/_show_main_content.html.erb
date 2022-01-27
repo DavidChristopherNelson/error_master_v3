@@ -9,10 +9,10 @@
     <% end %>
   </div>
 </div>
-<%= render "filters/edit", 
-           filter: @filter, 
-           folder: @folder, 
-           folders: @folders %>
+<div id="edit-filter-form">
+  <%= render partial: "/filters/edit",
+           locals: {form_params: @edit_filter_form_params} %>
+</div>
 
 <!-- Rule section -->
 <!-- Rule top bar -->
@@ -28,10 +28,15 @@
             form="bulk_action">
       <%= image_tag("trash.svg", class: "icon black") %>
     </button>
-    <a class="modal-trigger" data-target="#add_rule" >
+    <a class="modal-trigger" data-target="#new-rule" >
       <%= image_tag("plus.svg", class: "icon") %>
     </a>
-    <%= render "/rules/new", rule: @rule, filter: @filter %>
+    <%= render partial: "/shared/modal", 
+               locals: {modal_id: "new-rule",
+                        form_id: "new-rule-form",
+                        title: "Create rule",
+                        form_path: "rules/new",
+                        form_params: @new_rule_form_params} %>
   </div>
 </div>
 
@@ -54,10 +59,15 @@
         <%= "Rule ID #{rule.id} matches '#{rule.value}' to error field 
              '#{rule.field}'" %>
       </h3>
-      <a class="modal-trigger" data-target=<%= "#edit_rule_#{rule.id}" %>>
+      <a class="modal-trigger" data-target=<%= "#edit-rule-#{rule.id}" %>>
         <%= image_tag("pen.svg", class: "icon") %>
       </a>
-      <%= render "/rules/edit", rule: rule %>
+      <%= render partial: "/shared/modal", 
+                 locals: {modal_id: "edit-rule-#{rule.id}",
+                          form_id: "edit-rule-#{rule.id}-form",
+                          title: "Edit rule",
+                          form_path: "rules/edit",
+                          form_params: @edit_rule_form_params[rule.id.to_s]} %>
     </div>
   </div>
 <% end %>

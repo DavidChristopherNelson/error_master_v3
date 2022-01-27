@@ -1,0 +1,20 @@
+<div id=<%= modal_id %> class="modal">
+  <div class="modal-contents vertical-container">
+    <div class="layer">
+      <div class="left">
+        <h1> <%= title %> </h1>
+      </div>
+      <div class="right">
+        <button class="close-modal">
+          <%= image_tag("close.svg", class: "icon black") %>
+        </button>
+      </div>
+    </div>
+    <div class="layer"></div>
+
+    <div id= <%= form_id %> >
+      <%= render partial: form_path,
+                 locals: {form_params: form_params} %>
+    </div>
+  </div>
+</div>

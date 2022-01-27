@@ -32,7 +32,6 @@ insert_into_side_bar(
 var modal_triggers = document.querySelectorAll(".modal-trigger");
 modal_triggers.forEach(function(modal_trigger) {
   modal_trigger.addEventListener("click", function() {
-    console.log("modal button click detected");
     var modal = document.querySelector(`${this.dataset.target}`);
     modal.style.display = "flex";
   });

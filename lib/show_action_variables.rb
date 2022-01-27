@@ -16,9 +16,24 @@ module ShowActionVariables
     top_bar_variables
 
     @folder = Folder.find(@filter.folder_id)
-    @rule = Rule.new
     @rules = Rule.where(filter_id: @filter.id)
-    @fields = DecoError.new.attributes.keys
+    @edit_filter_form_params = {
+      filter: @filter,
+      folders: @folders,
+      folder: @folder
+    }
+    @new_rule_form_params = {
+      rule: Rule.new,
+      filter: @filter,
+      fields: DecoError.new.attributes.keys
+    }
+    @edit_rule_form_params = {}
+    @rules.each do |rule|
+      @edit_rule_form_params[rule.id.to_s] = {
+        rule: rule,
+        fields: DecoError.new.attributes.keys
+      }
+    end
   end
 
   def deco_error_show_action_variables
@@ -26,6 +41,11 @@ module ShowActionVariables
     top_bar_variables
 
     @deco_error_display_info = DecoError.display_info
+  end
+
+  def home_show_action_variables
+    side_bar_variables
+    top_bar_variables
   end
 
   def search_and_pagination
@@ -49,6 +69,10 @@ module ShowActionVariables
     @folders = Folder.hierarchy_order
     @folder_display_info = Folder.display_info
     @folder_new = Folder.new
+    @new_folder_form_params = {
+      folder_new: @folder_new,
+      folders: @folders
+    }
   end
 
   def top_bar_variables
@@ -56,5 +80,10 @@ module ShowActionVariables
     @filters = Filter.order(:execution_order)
     @filter_new = Filter.new
     @folders = Folder.hierarchy_order
+    @new_filter_form_params = {
+      filter_new: @filter_new,
+      folders: @folders
+    }
+    @new_error_form_params = {}
   end
 end
