@@ -3,6 +3,7 @@ require 'show_action_variables'
 class DecoErrorsController < ApplicationController
   include ShowActionVariables
   before_action :set_deco_error, only: %i[show edit update destroy]
+  protect_from_forgery(except: [:create])
 
   # GET /deco_errors
   # GET /deco_errors.json
