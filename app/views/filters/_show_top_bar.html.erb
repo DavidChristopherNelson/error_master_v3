@@ -3,7 +3,12 @@
   <%= render "/shared/dropdown_menu", filters: @filters  %>
 </div>
 <div class="top-bar-modals">
-    <%= render "/deco_errors/new" %>
+  <%= render partial: "/shared/modal", 
+             locals: {modal_id: "new-decoerror",
+                      form_id: "new-decoerror-form",
+                      title: "Create error",
+                      form_path: "deco_errors/new",
+                      form_params: @new_error_form_params} %>
     <%= render partial: "/shared/modal", 
                locals: {modal_id: "new-filter",
                         form_id: "new-filter-form",

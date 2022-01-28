@@ -1,26 +1,27 @@
-<div id="add_deco_error" class="modal">
-  <div class="modal-contents vertical-container">
-    <div class="layer">
-      <div class="left">
-        <h1> Create error </h1>
-      </div>
-      <div class="right">
-        <button class="close-modal">
-          <%= image_tag("close.svg", class: "icon black") %>
-        </button>
-      </div>
-    </div>
-    <div class="layer"></div>
+<%= form_with(model: form_params[:deco_error], 
+              local: false) do |form| %>
+  <% if form_params[:deco_error].errors.any? %>
+    <div id="error_explanation">
+      <h2>
+        <%= pluralize(form_params[:deco_error].errors.count, "error") %> 
+        prohibited this folder from being saved.
+      </h2>
 
-    <%= form_with url: "/deco_errors", method: :post do |form| %>
-      <div class="layer left">
-        <%= form.label :json %>
-        <%= form.text_area :json %>
-      </div>
-      <div class="layer"></div>
-      <div class="layer right">
-        <%= form.submit "Submit", class: "close-modal"  %>
-      </div>
-    <% end %>
+      <ul>
+        <% form_params[:deco_error].errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="layer">
+    <div class="left">
+      <%= form.label :json %>
+      <%= form.text_area :json %>
+    </div>
   </div>
-</div>
+  <div class="layer"></div>
+  <div class="layer right">
+    <%= form.submit "Submit", class: "close-modal"  %>
+  </div>
+<% end %>

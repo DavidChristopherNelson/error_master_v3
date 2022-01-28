@@ -1,27 +1,32 @@
+console.log("form_submit_failure.js.erb");
 <% if @failed_resource.id %>
-  <% class_name = @failed_resource.class.to_s.downcase %>
+  <% class_name = @failed_resource.class.to_s.underscore %>
   <% form_path = "/#{class_name.pluralize}/edit" %>
   <% modal_selector = "#edit-#{class_name}" %>
   <% modal_title = "Edit #{class_name}" %>
   <% if @failed_resource.class == Rule %>
-    <% form_id = "#edit-#{class_name}-#{@failed_resource.id}-form" %>
+    <% form_id = "#edit-rule-#{@failed_resource.id}-form" %>
   <% else %>
     <% form_id = "#edit-#{class_name}-form" %>
   <% end %>
 <% else %>
-  <% class_name = @failed_resource.class.to_s.downcase %>
-  <% form_id = "#new-#{class_name}-form" %>
-  <% form_path = "/#{class_name.pluralize}/new" %>
-  <% modal_selector = "#new-#{class_name}" %>
-  <% modal_title = "Create #{class_name}" %>
+  <% class_name = @failed_resource.class.to_s %>
+  <% form_id = "#new-#{class_name.downcase}-form" %>
+  <% form_path = "/#{class_name.underscore.pluralize}/new" %>
+  <% modal_selector = "#new-#{class_name.downcase}" %>
+  <% modal_title = "Create #{class_name.underscore}" %>
 <% end %>
 
+console.log("<%= form_id %>");
 var form_tag = document.querySelector("<%= form_id %>");
+console.log(form_tag);
 form_tag.innerHTML = "";
 form_tag.insertAdjacentHTML('afterbegin', 
                             "<%= escape_javascript( 
                render partial: form_path, 
                       locals: {form_params: @form_params} ) %>");
 
+console.log("<%= modal_selector %>");
 var modal = document.querySelector("<%= modal_selector %>");
+console.log(modal);
 modal.style.display = "flex";

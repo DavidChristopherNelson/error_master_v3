@@ -84,6 +84,8 @@ module ShowActionVariables
       filter_new: @filter_new,
       folders: @folders
     }
-    @new_error_form_params = {}
+    @new_error_form_params = {
+      deco_error: @deco_error_new
+    }
   end
 end

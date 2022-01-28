@@ -1,3 +1,4 @@
+require 'json'
 require 'show_action_variables'
 class DecoErrorsController < ApplicationController
   include ShowActionVariables
@@ -35,28 +36,33 @@ class DecoErrorsController < ApplicationController
   # POST /deco_errors
   # POST /deco_errors.json
   def create
-    @deco_error = DecoError.new(deco_error_params)
+    @deco_error = DecoError.new
+    converted_json = JSON[params[:deco_error][:json]]
+    @deco_error.attributes.keys.each do |field|
+      next if converted_json[field] == nil
+      next if ["id", "filter_id", "created_at", "updated_at"].include? field
+      @deco_error[field] = converted_json[field]
+    end
+    @deco_error["filter_id"] = 1
 
     respond_to do |format|
       if @deco_error.save
-        format.html do
-          redirect_to(@deco_error,
-                      notice: 'Deco error was successfully \
-                                  created.'
-                     )
-        end
-        format.json do
-          render(:show,
-                 status: :created,
-                 location: @deco_error
+        @deco_error.folders << Folder.find(1)
+        @deco_error.folders << Folder.find(2)
+        @folder = Folder.find(2)
+        deco_error_show_action_variables
+        format.js do
+          render(template: "/deco_errors/show.js.erb",
+                 layout: false
                 )
         end
       else
-        format.html { render(:new) }
-        format.json do
-          render(json: @deco_error.errors,
-                 status: :unprocessable_entity
-                )
+        @failed_resource = @deco_error
+        deco_error_show_action_variables
+        @form_params = { deco_error: @deco_error }
+        format.js do 
+          render(template: "/shared/form_submit_failure",
+                 layout: false)
         end
       end
     end
@@ -101,6 +107,6 @@ class DecoErrorsController < ApplicationController
   def deco_error_params
     return nil if params[:deco_error].nil?
 
-    params.require(:deco_error).permit(:read)
+    params.require(:deco_error).permit(:read, :json)
   end
 end

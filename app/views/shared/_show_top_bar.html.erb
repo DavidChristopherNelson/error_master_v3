@@ -13,4 +13,10 @@
                       title: "Create filter",
                       form_path: "filters/new",
                       form_params: @new_filter_form_params} %>
+  <%= render partial: "/shared/modal", 
+             locals: {modal_id: "new-decoerror",
+                      form_id: "new-decoerror-form",
+                      title: "Create error",
+                      form_path: "deco_errors/new",
+                      form_params: @new_error_form_params} %>
 </div>
