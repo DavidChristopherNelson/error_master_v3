@@ -38,26 +38,17 @@ class DecoErrorsController < ApplicationController
   # POST /deco_errors.json
   def create
     puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-    params["json"].each { |field| p field }
-    p my_hash = params.to_h
-    p my_hash["title"]
-    my_hash.keys.each do |field|
-      p my_hash[field]
-    end
-    puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
     @deco_error = DecoError.new
-    if params.class == String
-      converted_json = JSON.parse(params)
-    else
-      converted_json = JSON[params[:deco_error][:json]]
-    end
-    @deco_error.attributes.keys.each do |field|
-      next if converted_json[field] == nil
-      next if ["id", "filter_id", "created_at", "updated_at"].include? field
-      @deco_error[field] = converted_json[field]
+    params["json"].each do |pair|
+      next if pair[1] == nil || pair[1] == ""
+      next if ["id", "filter_id", "created_at", "updated_at"].include? pair[0]
+      @deco_error[pair[0]] = pair[1]
+      p pair[1]
     end
     @deco_error["filter_id"] = 1
-
+    p @deco_error
+    puts @deco_error
+    puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
     respond_to do |format|
       if @deco_error.save
         @deco_error.folders << Folder.find(1)
