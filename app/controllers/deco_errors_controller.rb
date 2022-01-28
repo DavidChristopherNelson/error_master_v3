@@ -38,7 +38,11 @@ class DecoErrorsController < ApplicationController
   # POST /deco_errors.json
   def create
     @deco_error = DecoError.new
-    converted_json = JSON[params[:deco_error][:json]]
+    if params.class == String
+      converted_json = JSON.parse(params)
+    else
+      converted_json = JSON[params[:deco_error][:json]]
+    end
     @deco_error.attributes.keys.each do |field|
       next if converted_json[field] == nil
       next if ["id", "filter_id", "created_at", "updated_at"].include? field
