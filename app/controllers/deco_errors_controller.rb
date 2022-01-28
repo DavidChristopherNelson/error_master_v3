@@ -37,18 +37,26 @@ class DecoErrorsController < ApplicationController
   # POST /deco_errors
   # POST /deco_errors.json
   def create
-    puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
     @deco_error = DecoError.new
-    params["json"].each do |pair|
-      next if pair[1] == nil || pair[1] == ""
-      next if ["id", "filter_id", "created_at", "updated_at"].include? pair[0]
-      @deco_error[pair[0]] = pair[1]
-      p pair[1]
+    # The if/else clause determines if the request was sent from Error Master
+    # or from a third party site. 
+    if params["authenticity_token"]
+      converted_json = JSON[params[:deco_error][:json]]
+      @deco_error.attributes.keys.each do |field|
+        next if converted_json[field] == nil
+        next if ["id", "filter_id", "created_at", "updated_at"].include? field
+        @deco_error[field] = converted_json[field]
+      end
+    else
+      params["json"].each do |pair|
+        next if pair[1] == nil || pair[1] == ""
+        next if ["id", "filter_id", "created_at", "updated_at"].include? pair[0]
+        @deco_error[pair[0]] = pair[1]
+        p pair[1]
+      end
     end
     @deco_error["filter_id"] = 1
-    p @deco_error
-    puts @deco_error
-    puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+
     respond_to do |format|
       if @deco_error.save
         @deco_error.folders << Folder.find(1)
