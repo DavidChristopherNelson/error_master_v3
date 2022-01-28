@@ -38,6 +38,7 @@ class DecoErrorsController < ApplicationController
   # POST /deco_errors.json
   def create
     puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    params["json"].each { |field| p field }
     p my_hash = params.to_h
     p my_hash["title"]
     my_hash.keys.each do |field|
@@ -119,6 +120,6 @@ class DecoErrorsController < ApplicationController
   def deco_error_params
     return nil if params[:deco_error].nil?
 
-    params.require(:deco_error).permit(:read, :json)
+    params.require(:deco_error).permit(:read, :json, "json", "title", "controller")
   end
 end
