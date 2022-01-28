@@ -38,7 +38,10 @@ class DecoErrorsController < ApplicationController
   # POST /deco_errors.json
   def create
     puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-    puts "Test STDOUT"
+    p params
+    p params.class
+    p params["json"]
+    params["json"].each { |field| p field }
     puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
     @deco_error = DecoError.new
     if params.class == String
