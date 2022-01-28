@@ -38,10 +38,11 @@ class DecoErrorsController < ApplicationController
   # POST /deco_errors.json
   def create
     puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-    p params
-    p params.class
-    p params["json"]
-    params["json"].each { |field| p field }
+    p my_hash = params.to_h
+    p my_hash["title"]
+    my_hash.keys.each do |field|
+      p my_hash[field]
+    end
     puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
     @deco_error = DecoError.new
     if params.class == String
