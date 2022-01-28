@@ -37,6 +37,9 @@ class DecoErrorsController < ApplicationController
   # POST /deco_errors
   # POST /deco_errors.json
   def create
+    puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    puts "Test STDOUT"
+    puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
     @deco_error = DecoError.new
     if params.class == String
       converted_json = JSON.parse(params)
