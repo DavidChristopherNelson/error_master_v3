@@ -72,7 +72,6 @@ unread_submit_button.addEventListener("click", (event) => {
 
 // Background Rule Engine
 function queryForPercentage (progress_bar) {
-  console.log("queryForPercentage is running");
   fetch('/workers/<%= @rule_engine_id %>')
     .then(response => response.json())
     .then(data => {
