@@ -38,10 +38,21 @@
   <div class="layer"></div>
 </div>
 <div class="side-bar-modals">
-    <%= render partial: "/shared/modal", 
-               locals: {modal_id: "new-folder",
-                        form_id: "new-folder-form",
-                        title: "Create folder",
-                        form_path: "folders/new",
-                        form_params: @new_folder_form_params} %>
+  <%= render partial: "/shared/modal", 
+             locals: {modal_id: "new-folder",
+                      form_id: "new-folder-form",
+                      title: "Create folder",
+                      form_path: "folders/new",
+                      form_params: @new_folder_form_params} %>
+  <div id="progress-modal" class="modal">
+    <div class="modal-contents vertical-container">
+      <div class="layer">
+        <h1> Running Rule Engine. Please wait. </h1>
+      </div>
+      <div class="layer"></div>
+      <div class="layer progress-bar-background">
+        <div id="progress-bar"></div>
+      </div>
+    </div>
+  </div>
 </div>

@@ -87,5 +87,8 @@ module ShowActionVariables
     @new_error_form_params = {
       deco_error: @deco_error_new
     }
+    @export = {
+      export_data: 'XXXX'
+    }
   end
 end

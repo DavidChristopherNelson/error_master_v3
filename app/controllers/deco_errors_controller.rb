@@ -39,23 +39,25 @@ class DecoErrorsController < ApplicationController
   def create
     @deco_error = DecoError.new
     # The if/else clause determines if the request was sent from Error Master
-    # or from a third party site. 
-    if params["authenticity_token"]
+    # or from a third party site.
+    excluded_fields = %w[id filter_id created_at updated_at]
+    if params['authenticity_token']
       converted_json = JSON[params[:deco_error][:json]]
-      @deco_error.attributes.keys.each do |field|
-        next if converted_json[field] == nil
-        next if ["id", "filter_id", "created_at", "updated_at"].include? field
+      @deco_error.attributes.each_key do |field|
+        next if converted_json[field].nil?
+        next if excluded_fields.include?(field)
+
         @deco_error[field] = converted_json[field]
       end
     else
-      params["json"].each do |pair|
-        next if pair[1] == nil || pair[1] == ""
-        next if ["id", "filter_id", "created_at", "updated_at"].include? pair[0]
+      params['json'].each do |pair|
+        next if pair[1].nil? || pair[1] == ''
+        next if excluded_fields.include?(pair[0])
+
         @deco_error[pair[0]] = pair[1]
-        p pair[1]
       end
     end
-    @deco_error["filter_id"] = 1
+    @deco_error['filter_id'] = 1
 
     respond_to do |format|
       if @deco_error.save
@@ -64,7 +66,7 @@ class DecoErrorsController < ApplicationController
         @folder = Folder.find(2)
         deco_error_show_action_variables
         format.js do
-          render(template: "/deco_errors/show.js.erb",
+          render(template: '/deco_errors/show.js.erb',
                  layout: false
                 )
         end
@@ -72,9 +74,10 @@ class DecoErrorsController < ApplicationController
         @failed_resource = @deco_error
         deco_error_show_action_variables
         @form_params = { deco_error: @deco_error }
-        format.js do 
-          render(template: "/shared/form_submit_failure",
-                 layout: false)
+        format.js do
+          render(template: '/shared/form_submit_failure',
+                 layout: false
+                )
         end
       end
     end
@@ -119,6 +122,6 @@ class DecoErrorsController < ApplicationController
   def deco_error_params
     return nil if params[:deco_error].nil?
 
-    params.require(:deco_error).permit(:read, :json, "json", "title", "controller")
+    params.require(:deco_error).permit(:read, :json, 'json', 'title', 'controller')
   end
 end

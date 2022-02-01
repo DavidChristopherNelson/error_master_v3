@@ -14,7 +14,12 @@ class FoldersController < ApplicationController
   # GET /folders/1
   # GET /folders/1.json
   def show
-    run_rule_engine if params['rule_engine']
+    resource = {
+      controller: params[:controller],
+      id: params[:id]
+    }
+    @rule_engine_id = RuleEngineWorker.perform_async(resource) if params['rule_engine']
+    # run_rule_engine if params['rule_engine'] # delete if background rule engine works.
     folder_show_action_variables
 
     respond_to do |format|

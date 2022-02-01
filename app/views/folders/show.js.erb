@@ -33,7 +33,9 @@ var modal_triggers = document.querySelectorAll(".modal-trigger");
 modal_triggers.forEach(function(modal_trigger) {
   modal_trigger.addEventListener("click", function() {
     var modal = document.querySelector(`${this.dataset.target}`);
+    console.log(modal);
     modal.style.display = "flex";
+    console.log(modal);
   });
 });
 
@@ -67,3 +69,27 @@ var unread_submit_button = document.querySelector("#mark-as-unread-button");
 unread_submit_button.addEventListener("click", (event) => {
   document.querySelector('input[id=mark_as_unread]').click();
 });
+
+// Background Rule Engine
+function queryForPercentage (progress_bar) {
+  fetch('/workers/<%= @rule_engine_id %>')
+    .then(response => response.json())
+    .then(data => {
+      var current_progress = data["percentage_done"];
+      progress_bar.style.width = `${current_progress}vw`;
+      if (current_progress !== 100) {
+        setTimeout(queryForPercentage(progress_bar), 500);
+      } else {
+        var progress_modal = document.querySelector("#progress-modal");
+        progress_modal.style.display = "none";
+        progress_bar.style.width = `${current_progress}px`;
+      }
+    });
+}
+
+<% if @rule_engine_id %>
+  var progress_modal = document.querySelector("#progress-modal");
+  var progress_bar = document.querySelector("#progress-bar");
+  progress_modal.style.display = "flex";
+  queryForPercentage(progress_bar);
+<% end %>

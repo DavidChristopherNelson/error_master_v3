@@ -6,6 +6,8 @@ gem 'jbuilder',   '2.10.0'
 gem 'puma',       '5.3.1'
 gem 'rails',      '6.1.4.1'
 gem 'sass-rails'
+gem 'sidekiq_status'
+gem 'sinatra'
 gem 'turbolinks', '5.0.1'
 gem 'webpacker',  '5.4.0'
 

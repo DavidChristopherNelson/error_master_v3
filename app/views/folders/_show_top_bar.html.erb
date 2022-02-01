@@ -69,4 +69,10 @@
                         title: "Create filter",
                         form_path: "filters/new",
                         form_params: @new_filter_form_params} %>
+    <%= render partial: "/shared/modal", 
+               locals: {modal_id: "export",
+                        form_id: "export-form",
+                        title: "Export data",
+                        form_path: "application/export",
+                        form_params: @export} %>
 </div>
