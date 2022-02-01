@@ -72,13 +72,14 @@ unread_submit_button.addEventListener("click", (event) => {
 
 // Background Rule Engine
 function queryForPercentage (progress_bar) {
+  console.log("queryForPercentage is running");
   fetch('/workers/<%= @rule_engine_id %>')
     .then(response => response.json())
     .then(data => {
       var current_progress = data["percentage_done"];
       progress_bar.style.width = `${current_progress}vw`;
       if (current_progress !== 100) {
-        setTimeout(queryForPercentage(progress_bar), 500);
+        setTimeout(queryForPercentage(progress_bar), 1000);
       } else {
         var progress_modal = document.querySelector("#progress-modal");
         progress_modal.style.display = "none";
