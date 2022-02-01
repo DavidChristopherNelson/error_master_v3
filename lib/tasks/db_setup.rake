@@ -2,8 +2,9 @@
 # rake db_setup:reset
 # rake db_setup:heroku_reset
 # heroku apps
-#--app cryptic-ridge-73996
-#--app error-master-demo
+# --app cryptic-ridge-73996
+# --app error-master-demo
+# --app polar-refuge-71806
 
 namespace :db_setup do
   desc 'Reset, migrate and reseed the database.'
