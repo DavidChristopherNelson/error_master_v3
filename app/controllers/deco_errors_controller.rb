@@ -16,7 +16,7 @@ class DecoErrorsController < ApplicationController
   def show
     deco_error_show_action_variables
 
-    @folder = @deco_error.folders.where.not(id: 1).first
+    @folder = @deco_error.folder
     respond_to do |format|
       format.js do
         render(template: '/deco_errors/show.js.erb',

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_12_043132) do
+ActiveRecord::Schema.define(version: 2022_02_08_231024) do
 
   create_table "deco_errors", force: :cascade do |t|
     t.text "title"
@@ -37,7 +37,9 @@ ActiveRecord::Schema.define(version: 2022_01_12_043132) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "filter_id", null: false
+    t.integer "folder_id", null: false
     t.index ["filter_id"], name: "index_deco_errors_on_filter_id"
+    t.index ["folder_id"], name: "index_deco_errors_on_folder_id"
   end
 
   create_table "filters", force: :cascade do |t|
@@ -62,15 +64,6 @@ ActiveRecord::Schema.define(version: 2022_01_12_043132) do
     t.index ["parent_id"], name: "index_folders_on_parent_id"
   end
 
-  create_table "mappings", force: :cascade do |t|
-    t.integer "folder_id", null: false
-    t.integer "deco_error_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["deco_error_id"], name: "index_mappings_on_deco_error_id"
-    t.index ["folder_id"], name: "index_mappings_on_folder_id"
-  end
-
   create_table "rules", force: :cascade do |t|
     t.integer "filter_id", null: false
     t.text "field"
@@ -81,9 +74,8 @@ ActiveRecord::Schema.define(version: 2022_01_12_043132) do
   end
 
   add_foreign_key "deco_errors", "filters"
+  add_foreign_key "deco_errors", "folders"
   add_foreign_key "filters", "folders"
   add_foreign_key "folders", "folders", column: "parent_id"
-  add_foreign_key "mappings", "deco_errors"
-  add_foreign_key "mappings", "folders"
   add_foreign_key "rules", "filters"
 end

@@ -1,7 +1,17 @@
 class Rule < ApplicationRecord
-  belongs_to :filter
+  belongs_to :filter, touch: true
 
   validates :value, presence: true
+
+  # Returns a cache key that is different every time a Rule
+  # object is created, deleted or updated.
+  #
+  # @return [String] the cache key.
+  def self.cache_key
+    count = Rule.count
+    max_updated_at = Rule.maximum(:updated_at).to_s(:number)
+    "rules/#{max_updated_at}/#{count}"
+  end
 
   def serialize
     serialized_form = {}

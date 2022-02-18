@@ -1,13 +1,27 @@
 class DecoError < ApplicationRecord
-  has_many :mappings, dependent: :destroy
-  has_many :folders, through: :mappings
+  belongs_to :folder
   belongs_to :filter
+
+  # Returns a cache key that is different every time a Filter or Rule
+  # object is created or updated.
+  #
+  # @return [String] the cache key.
+  def self.cache_key
+    count = DecoError.count
+    max_created_at = DecoError.maximum(:created_at).to_s(:number)
+    "errors/#{max_created_at}/#{count}"
+  end
 
   def serialize
     serialized_form = {}
     attributes.each_key do |key|
       serialized_form[key.to_sym] = self[key]
     end
+    fields_with_values = []
+    attributes.each do |field, value|
+      fields_with_values << field.to_sym unless value.nil?
+    end
+    serialized_form[:fields_with_values] = fields_with_values
     serialized_form
   end
 

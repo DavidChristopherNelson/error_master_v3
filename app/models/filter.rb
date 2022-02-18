@@ -9,6 +9,28 @@ class Filter < ApplicationRecord
                    uniqueness: true
   validates :execution_order, uniqueness: true
 
+  # Returns a cache key that is different every time a Filter or Rule
+  # object is created, deleted or updated.
+  #
+  # @return [String] the cache key.
+  def self.cache_key
+    count = Filter.count
+    max_updated_at = Filter.maximum(:updated_at).to_s(:number)
+    "filters/#{max_updated_at}/#{count}"
+  end
+
+  def self.rule_engine_data
+    # filters = [[nil], [nil], ...]
+    filters = Filter.connection.query(
+      'SELECT logic FROM filters ORDER BY execution_order'
+    )
+    # rules = [[232, "request_id", "ZDFAAESSD"], ...]
+    rules = Rule.connection.query(
+      'SELECT id, field, value FROM rules ORDER BY id'
+    )
+    { filter_data: filters, rule_data: rules }
+  end
+
   def serialize
     # Serialize filter attributes.
     serialized_form = {}

@@ -75,14 +75,15 @@ function queryForPercentage (progress_bar) {
   fetch('/workers/<%= @rule_engine_id %>')
     .then(response => response.json())
     .then(data => {
+      console.log(data)
       var current_progress = data["percentage_done"];
-      progress_bar.style.width = `${current_progress}vw`;
+      progress_bar.style.width = `${current_progress}%`;
       if (current_progress !== 100) {
-        setTimeout(queryForPercentage(progress_bar), 1000);
+        setTimeout(queryForPercentage, 100, progress_bar);
+
       } else {
         var progress_modal = document.querySelector("#progress-modal");
         progress_modal.style.display = "none";
-        progress_bar.style.width = `${current_progress}px`;
       }
     });
 }

@@ -1,8 +1,6 @@
 class Folder < ApplicationRecord
-  has_many :mappings
-  has_many :deco_errors,
-           through: :mappings,
-           dependent: :destroy
+  has_many :deco_errors
+  has_one :filter, dependent: :destroy
   belongs_to :parent,
              class_name: 'Folder',
              optional: true

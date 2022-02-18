@@ -1,10 +1,8 @@
 require 'show_action_variables'
+require 'rule_engine'
 class ApplicationController < ActionController::Base
   include ShowActionVariables
+  include RuleEngine
 
-  def home
-    home_show_action_variables
-  end
-
-  def run_rule_engine; end
+  def home; end
 end
