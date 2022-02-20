@@ -38,7 +38,7 @@ class Folder < ApplicationRecord
 
   def self.hierarchy_order
     family_tree = []
-    Folder.where(parent_id: nil).find_each do |folder|
+    Folder.where(parent_id: nil).order(:created_at).find_each do |folder|
       folder.descendants(family_tree)
     end
     family_tree
@@ -46,7 +46,7 @@ class Folder < ApplicationRecord
 
   def descendants(family_tree)
     family_tree << self
-    children.each do |child|
+    children.order(:created_at).each do |child|
       child.descendants(family_tree)
     end
   end

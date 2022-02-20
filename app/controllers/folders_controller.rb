@@ -66,16 +66,16 @@ class FoldersController < ApplicationController
   # PATCH/PUT /folders/1
   # PATCH/PUT /folders/1.json
   def update
-    folder_show_action_variables
-
     respond_to do |format|
       if @folder.update(folder_params)
+        folder_show_action_variables
         format.js do
           render(template: '/folders/show.js.erb',
                  layout: false
                 )
         end
       else
+        folder_show_action_variables
         @failed_resource = @folder
         @form_params = {
           folder: @folder,
