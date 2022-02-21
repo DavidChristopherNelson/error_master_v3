@@ -1,6 +1,9 @@
-DecoError.connection.exec_update(<<-EOQ, 'SQL', [[nil, '1'])
-	UPDATE  deco_errors
-	SET     folder_id = $1
-	WHERE   id = #{deco_error['id']}
-EOQ
-  has_many :profiles, -> { order url: :desc } ## change order as per your requirement to asc / desc
+config.cache_store = :mem_cache_store,
+                    (ENV["MEMCACHIER_SERVERS"] || "").split(","),
+                    {:username => ENV["MEMCACHIER_USERNAME"],
+                     :password => ENV["MEMCACHIER_PASSWORD"],
+                     :failover => true,
+                     :socket_timeout => 1.5,
+                     :socket_failure_delay => 0.2,
+                     :down_retry_delay => 60
+                    }
