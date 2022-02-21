@@ -58,6 +58,7 @@ class DecoErrorsController < ApplicationController
       end
     end
     @deco_error['filter_id'] = 1
+    @deco_error['folder_id'] = 1
 
     respond_to do |format|
       if @deco_error.save
