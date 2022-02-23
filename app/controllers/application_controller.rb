@@ -9,15 +9,21 @@ class ApplicationController < ActionController::Base
     rule_data = Rule.connection.execute(sql_rule_command)
     puts '==================================================================================='
     puts rule_data
+    p rule_data
     puts '==================================================================================='
-    puts rule_data.class
+ 
+    cache_result = Rails.cache.fetch('three') do
+      puts '==================================================================================='
+      puts 'cache_miss'
+      p rule_data
+      puts '==================================================================================='
+ 
+      rule_data
+    end
+
     puts '==================================================================================='
-    puts rule_data.values
+    puts cache_result
+    p cache_result
+    p cache_result.class
     puts '==================================================================================='
-    puts rule_data.values.class
-    puts '==================================================================================='
-    puts Hash[rule_data.values]
-    puts '==================================================================================='
-    puts Hash[rule_data.values].class
-    puts '==================================================================================='  end
 end
