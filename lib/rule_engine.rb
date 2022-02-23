@@ -99,7 +99,19 @@ module RuleEngine
   #  {"filter_id"=>42, "logic"=>nil, "id"=>120, "field"=>"controller",
   #  "value"=>"UUYKDOTL"}] ... }
   def hit_filter_cache
+    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+    puts 'Inside hit_filter_cache'
+    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+ 
+    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+    puts Filter.cache_key
+    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+ 
     Rails.cache.fetch(Filter.cache_key) do
+      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+      puts 'Cache miss detected'
+      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+ 
       rule_data = hit_rule_cache
 
       sql_filter_command = 'SELECT filters.id, filters.logic, filters.folder_id ' +
