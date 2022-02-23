@@ -40,6 +40,7 @@ module RuleEngine
     error_data = []
     case resource['controller']
     when 'folders'
+
       sql_statement = "SELECT #{get_rule_fields.join(', ')}, id " +
         'FROM deco_errors ' +
         "WHERE folder_id = #{resource['id']}"
@@ -72,7 +73,7 @@ module RuleEngine
     end
     # Unfortunately a few column names are reserved SQL keywords.
     rule_fields.map do |field|
-      field = "[#{field}]" if %w[action read date parameters release].include?(field)
+      field = "\"#{field}]\"" if %w[action read date parameters release].include?(field)
       field
     end
   end
