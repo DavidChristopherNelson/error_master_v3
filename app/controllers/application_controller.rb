@@ -11,20 +11,10 @@ class ApplicationController < ActionController::Base
     puts rule_data
     p rule_data
     puts '==================================================================================='
- 
-    cache_result = Rails.cache.fetch('three') do
-      puts '==================================================================================='
-      puts 'cache_miss'
-      p rule_data
-      puts '==================================================================================='
- 
-      rule_data
-    end
 
     puts '==================================================================================='
-    puts cache_result
-    p cache_result
-    p cache_result.class
+    puts rule_data.to_a
+    p rule_data
     puts '==================================================================================='
   end
 end
