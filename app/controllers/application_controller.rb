@@ -26,4 +26,5 @@ class ApplicationController < ActionController::Base
     p cache_result
     p cache_result.class
     puts '==================================================================================='
+  end
 end
