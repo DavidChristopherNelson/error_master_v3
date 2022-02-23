@@ -107,7 +107,7 @@ module RuleEngine
     puts Filter.cache_key
     puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
  
-    Rails.cache.fetch(Filter.cache_key) do
+    return_value = Rails.cache.fetch(Filter.cache_key) do
       puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
       puts 'Cache miss detected'
       puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
@@ -119,8 +119,22 @@ module RuleEngine
  
       sql_filter_command = 'SELECT filters.id, filters.logic, filters.folder_id ' +
         'FROM filters ORDER BY filters.execution_order'
+      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+      puts sql_filter_command
+      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+ 
       filter_data = Filter.connection.execute(sql_filter_command)
+
+      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+      puts filter_data
+      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+ 
       filter_data.each { |filter| filter[:rules] = [] }
+
+      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+      puts filter_data.first
+      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+ 
       rule_data.each do |rule|
         filter_data.each do |filter|
           filter[:rules] << rule if filter['id'] == rule['filter_id']
@@ -128,6 +142,11 @@ module RuleEngine
       end
       filter_data
     end
+
+    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+    puts return_value
+    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+    return_value
   end
 
   # Returns the rule information that is stored in the cache. It reseeds the
@@ -163,7 +182,7 @@ module RuleEngine
       puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
       puts rule_data
       puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
- 
+      rule_data
     end
     puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
     puts rule_data
