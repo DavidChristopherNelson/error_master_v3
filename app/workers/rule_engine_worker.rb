@@ -7,16 +7,9 @@ class RuleEngineWorker
   include ComputeLogic
 
   def perform(resource)
-    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-    puts resource
-    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
     at(1)
-    Rails.cache.fetch('two') do
-      "ni"
-    end
-    at(2)
     error_data, filter_data = get_error_and_filter_data(resource)
-    at(3)
+    at(2)
     self.total = error_data.size
     errors_categorised = 0
     error_data.each do |error|

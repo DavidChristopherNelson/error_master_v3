@@ -10,10 +10,6 @@ module RuleEngine
   # @return [array] returns error and filter data. First element contains error
   #                 data and the second element contains filter data.
   def get_error_and_filter_data(resource)
-    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-    puts resource
-    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-
     # parameter checking
     raise(ArguementError, 'Argument must have :controller key.') if resource['controller'].nil?
 
@@ -29,15 +25,8 @@ module RuleEngine
       )
     end
 
-    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-    puts 'Passes parameter checking'
-    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-    # get filter data
+   # get filter data
     filter_data = hit_filter_cache
-
-    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-    puts 'Passes hit_filter_cache'
-    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
  
     if resource['controller'] == 'filters'
       after_filter_of_interest = false
@@ -99,55 +88,23 @@ module RuleEngine
   #  {"filter_id"=>42, "logic"=>nil, "id"=>120, "field"=>"controller",
   #  "value"=>"UUYKDOTL"}] ... }
   def hit_filter_cache
-    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-    puts 'Inside hit_filter_cache'
-    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
- 
-    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-    puts Filter.cache_key
-    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
- 
     return_value = Rails.cache.fetch(Filter.cache_key) do
-      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-      puts 'Cache miss detected'
-      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
- 
       rule_data = hit_rule_cache
-      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-      puts 'rule_data'
-      puts rule_data
-      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
- 
       sql_filter_command = 'SELECT filters.id, filters.logic, filters.folder_id ' +
-        'FROM filters ORDER BY filters.execution_order'
-      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-      puts sql_filter_command
-      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
- 
+                           'FROM filters ORDER BY filters.execution_order'
       filter_data = Filter.connection.execute(sql_filter_command)
 
-      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-      puts filter_data
-      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
- 
       filter_data.each { |filter| filter[:rules] = [] }
 
-      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-      puts filter_data.first
-      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
- 
       rule_data.each do |rule|
         filter_data.each do |filter|
           filter[:rules] << rule if filter['id'] == rule['filter_id']
         end
       end
-      filter_data
+      filter_data.to_a
     end
 
-    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-    puts return_value
-    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-    return_value
+   return_value
   end
 
   # Returns the rule information that is stored in the cache. It reseeds the
@@ -159,37 +116,14 @@ module RuleEngine
   # [{"filter_id"=>100, "logic"=>nil, "id"=>293, "field"=>"priority",
   #   "value"=>"UZINJKJX"}, ...]
   def hit_rule_cache
-    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-    puts 'Inside hit_rule_cache'
-    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-    puts Filter.cache_key
-    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
- 
     rule_data = Rails.cache.fetch(Rule.cache_key) do
-      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-      puts 'Cache miss detected'
-      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
- 
       sql_rule_command = 'SELECT rules.filter_id, rules.id, rules.field, rules.value
                           FROM filters
                           INNER JOIN rules
                           ON filters.id = rules.filter_id'
-      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-      puts sql_rule_command
-      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
- 
+
       rule_data = Rule.connection.execute(sql_rule_command)
-      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-      puts rule_data
-      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-      byebug
-      rule_data
+      rule_data.to_a
     end
-    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-    puts rule_data
-    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
- 
-    rule_data
   end
 end
