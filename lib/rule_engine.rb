@@ -10,6 +10,10 @@ module RuleEngine
   # @return [array] returns error and filter data. First element contains error
   #                 data and the second element contains filter data.
   def get_error_and_filter_data(resource)
+    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+    puts resource
+    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+
     # parameter checking
     raise(ArguementError, 'Argument must have :controller key.') if resource['controller'].nil?
 
@@ -25,8 +29,16 @@ module RuleEngine
       )
     end
 
+    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+    puts 'Passes parameter checking'
+    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
     # get filter data
     filter_data = hit_filter_cache
+
+    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+    puts 'Passes hit_filter_cache'
+    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+ 
     if resource['controller'] == 'filters'
       after_filter_of_interest = false
       filter_data.select! do |filter|

@@ -7,6 +7,9 @@ class RuleEngineWorker
   include ComputeLogic
 
   def perform(resource)
+    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+    puts resource
+    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
     at(1)
     Rails.cache.fetch('two') do
       "ni"
