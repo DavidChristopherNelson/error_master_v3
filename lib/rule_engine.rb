@@ -113,7 +113,10 @@ module RuleEngine
       puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
  
       rule_data = hit_rule_cache
-
+      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+      puts rule_data
+      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+ 
       sql_filter_command = 'SELECT filters.id, filters.logic, filters.folder_id ' +
         'FROM filters ORDER BY filters.execution_order'
       filter_data = Filter.connection.execute(sql_filter_command)
@@ -136,12 +139,31 @@ module RuleEngine
   # [{"filter_id"=>100, "logic"=>nil, "id"=>293, "field"=>"priority",
   #   "value"=>"UZINJKJX"}, ...]
   def hit_rule_cache
+    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+    puts 'Inside hit_rule_cache'
+    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+    puts Filter.cache_key
+    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+ 
     rule_data = Rails.cache.fetch(Rule.cache_key) do
+      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+      puts 'Cache miss detected'
+      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+ 
       sql_rule_command = 'SELECT rules.filter_id, rules.id, rules.field, rules.value
                           FROM filters
                           INNER JOIN rules
                           ON filters.id = rules.filter_id'
+      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+      puts sql_rule_command
+      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+ 
       rule_data = Rule.connection.execute(sql_rule_command)
+      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+      puts rule_data
+      puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+ 
     end
   end
 end
