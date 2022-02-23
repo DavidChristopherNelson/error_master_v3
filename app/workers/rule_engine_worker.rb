@@ -8,8 +8,12 @@ class RuleEngineWorker
 
   def perform(resource)
     at(1)
-    error_data, filter_data = get_error_and_filter_data(resource)
+    Rails.cache.fetch('two') do
+      "ni"
+    end
     at(2)
+    error_data, filter_data = get_error_and_filter_data(resource)
+    at(3)
     self.total = error_data.size
     errors_categorised = 0
     error_data.each do |error|
