@@ -73,7 +73,7 @@ module RuleEngine
     end
     # Unfortunately a few column names are reserved SQL keywords.
     rule_fields.map do |field|
-      field = "\"#{field}]\"" if %w[action read date parameters release].include?(field)
+      field = "\"#{field}\"" if %w[action read date parameters release].include?(field)
       field
     end
   end
