@@ -43,7 +43,7 @@ module RuleEngine
       sql_statement = "SELECT #{get_rule_fields.join(', ')}, id " +
         'FROM deco_errors ' +
         "WHERE folder_id = #{resource['id']}"
-      error_data = DecoError.connection.execute(sql_statement)
+      error_data = DecoError.connection.execute(sql_statement).to_a
     when 'filters'
       filter_ids = []
       filter_data.each { |filter| filter_ids << filter['id'] }
@@ -53,7 +53,7 @@ module RuleEngine
         'FROM deco_errors ' +
         'WHERE filter_id ' +
         "IN (#{filter_ids.join(', ')})"
-      error_data = DecoError.connection.execute(sql_statement)
+      error_data = DecoError.connection.execute(sql_statement).to_a
     end
 
     # return data
@@ -92,19 +92,21 @@ module RuleEngine
       rule_data = hit_rule_cache
       sql_filter_command = 'SELECT filters.id, filters.logic, filters.folder_id ' +
                            'FROM filters ORDER BY filters.execution_order'
-      filter_data = Filter.connection.execute(sql_filter_command)
+      filter_data = Filter.connection.execute(sql_filter_command).to_a
 
       filter_data.each { |filter| filter[:rules] = [] }
 
       rule_data.each do |rule|
         filter_data.each do |filter|
+          filter[:rules]
+
           filter[:rules] << rule if filter['id'] == rule['filter_id']
         end
       end
       filter_data.to_a
     end
 
-   return_value
+    return_value
   end
 
   # Returns the rule information that is stored in the cache. It reseeds the
@@ -122,8 +124,7 @@ module RuleEngine
                           INNER JOIN rules
                           ON filters.id = rules.filter_id'
 
-      rule_data = Rule.connection.execute(sql_rule_command)
-      rule_data.to_a
+      rule_data = Rule.connection.execute(sql_rule_command).to_a
     end
   end
 end
