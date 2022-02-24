@@ -58,8 +58,8 @@ class DecoErrorsController < ApplicationController
         next if excluded_fields.include?(pair[0])
         error_fields_and_values[pair[0]] = pair[1]
       end
-      error_fields_and_values[filter_id] = '1'
-      error_fields_and_values[folder_id] = '1'
+      error_fields_and_values['filter_id'] = '1'
+      error_fields_and_values['folder_id'] = '1'
       sql_string = "INSERT INTO deco_errors(#{error_fields_and_values.keys.join(', ')}) " +
                    "VALUES #{error_fields_and_values.values.join(', ')}"
       puts '====================================================================================='
