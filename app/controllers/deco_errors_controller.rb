@@ -52,17 +52,19 @@ class DecoErrorsController < ApplicationController
         @deco_error['folder_id'] = 1
       end
     else
-      error_fields_and_values = {
-        'filter_id' => 1,
-        'folder_id' => 1
-      }
+      error_fields_and_values = {}
       params['json'].each do |pair|
         next if pair[1].nil? || pair[1] == ''
         next if excluded_fields.include?(pair[0])
         error_fields_and_values[pair[0]] = pair[1]
       end
+      error_fields_and_values[filter_id] = '1'
+      error_fields_and_values[folder_id] = '1'
       sql_string = "INSERT INTO deco_errors(#{error_fields_and_values.keys.join(', ')}) " +
                    "VALUES #{error_fields_and_values.values.join(', ')}"
+      puts '====================================================================================='
+      p sql_string
+      puts '====================================================================================='      
       sql_return_value = DecoError.connection.query(sql_string)
       puts '====================================================================================='
       p sql_return_value
