@@ -35,5 +35,37 @@ else
 	end
 	sql_string = "INSERT INTO deco_errors(#{error_fields_and_values.keys.join(', ')}) " +
                "VALUES #{error_fields_and_values.values.join(', ')}"
-  DecoError.connection.query(sql_string)
+  sql_return_value = DecoError.connection.query(sql_string)
+  puts '====================================================================================='
+  p sql_return_value
+  puts '====================================================================================='
+
 end
+
+
+
+
+
+    params = { body: 
+             { json: 
+             { title: deco_error.title,
+               priority: deco_error.priority,
+               error_type: deco_error.error_type,
+               date: deco_error.date,
+               site_url: deco_error.site_url,
+               controller: deco_error.controller,
+               action: deco_error.action,
+               hostname: deco_error.hostname,
+               remote_ip: deco_error.remote_ip,
+               request_id: deco_error.request_id,
+               request_log: deco_error.request_log,
+               parameters: deco_error.parameters,
+               session_id: deco_error.session_id,
+               rails_env: deco_error.rails_env,
+               release: deco_error.release,
+               environment_variables: deco_error.environment_variables,
+               session_data: deco_error.session_data,
+               exception_class: deco_error.exception_class,
+               exception_message: deco_error.exception_message,
+               exception_stacktrace: deco_error.exception_stacktrace
+               } } }
