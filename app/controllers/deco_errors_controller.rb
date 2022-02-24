@@ -60,7 +60,7 @@ class DecoErrorsController < ApplicationController
       end
       error_fields_and_values['filter_id'] = '1'
       error_fields_and_values['folder_id'] = '1'
-      sql_string = "INSERT INTO deco_errors(#{error_fields_and_values.keys.join(', ')}) " +
+      sql_string = "INSERT INTO deco_errors (#{error_fields_and_values.keys.join(', ')}) " +
                    "VALUES (\"#{error_fields_and_values.values.join("\", \"")}\")"
       puts '====================================================================================='
       p sql_string
