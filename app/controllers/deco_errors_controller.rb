@@ -48,17 +48,21 @@ class DecoErrorsController < ApplicationController
         next if excluded_fields.include?(field)
 
         @deco_error[field] = converted_json[field]
+        @deco_error['filter_id'] = 1
+        @deco_error['folder_id'] = 1
       end
     else
+      puts '====================================================================================='
+      p params
+      puts '====================================================================================='
       params['json'].each do |pair|
         next if pair[1].nil? || pair[1] == ''
         next if excluded_fields.include?(pair[0])
 
         @deco_error[pair[0]] = pair[1]
+
       end
     end
-    @deco_error['filter_id'] = 1
-    @deco_error['folder_id'] = 1
 
     respond_to do |format|
       if @deco_error.save
