@@ -38,6 +38,7 @@ class DecoErrorsController < ApplicationController
   # POST /deco_errors.json
   def create
     @deco_error = DecoError.new
+
     # The if/else clause determines if the request was sent from Error Master
     # or from a third party site.
     excluded_fields = %w[id filter_id created_at updated_at]
@@ -61,7 +62,7 @@ class DecoErrorsController < ApplicationController
       error_fields_and_values['filter_id'] = '1'
       error_fields_and_values['folder_id'] = '1'
       sql_string = "INSERT INTO deco_errors (#{error_fields_and_values.keys.join(', ')}) " +
-                   "VALUES (\"#{error_fields_and_values.values.join("\", \"")}\")"
+                   "VALUES ('#{error_fields_and_values.values.join("', '")}')"
       puts '====================================================================================='
       p sql_string
       puts '====================================================================================='      
