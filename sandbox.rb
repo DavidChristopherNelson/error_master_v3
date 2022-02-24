@@ -43,6 +43,9 @@ else
 end
 
 
+heroku pg:reset DATABASE_URL --app immense-eyrie-70341
+heroku run rake db:migrate --app immense-eyrie-70341
+heroku run rake db:seed --app immense-eyrie-70341
 
 
 
