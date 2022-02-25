@@ -76,13 +76,10 @@ class DecoErrorsController < ApplicationController
       p sql_string
       puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
       p 'DecoError.connection.execute(sql_string)'
-      p DecoError.connection.execute(sql_string)
+      p sql_insert_success
       puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
       p '!!DecoError.connection.execute(sql_string).to_a'
-      p !!DecoError.connection.execute(sql_string).to_a
-      puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-      p 'sql_insert_success'
-      p sql_insert_success
+      p !!sql_insert_success
       puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
     end
 
@@ -91,7 +88,7 @@ class DecoErrorsController < ApplicationController
         format.json do
           render status: 200
         end
-      if @deco_error.save
+      elsif @deco_error.save
         @deco_error.folders << Folder.find(1)
         @deco_error.folders << Folder.find(2)
         @folder = Folder.find(2)
