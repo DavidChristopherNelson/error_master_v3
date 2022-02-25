@@ -57,7 +57,9 @@ class DecoErrorsController < ApplicationController
       params['json'].each do |pair|
         next if pair[1].nil? || pair[1] == ''
         next if excluded_fields.include?(pair[0])
-        error_fields_and_values[pair[0]] = pair[1]
+        # The gsub removes all ' and " from the string. I do this because 
+        # can't figure out how to escape these characters.
+        error_fields_and_values[pair[0]] = pair[1].gsub(/'|"/, "")
       end
       error_fields_and_values['filter_id'] = '1'
       error_fields_and_values['folder_id'] = '1'
