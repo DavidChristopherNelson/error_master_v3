@@ -68,12 +68,13 @@ class DecoErrorsController < ApplicationController
       sql_string = "INSERT INTO deco_errors (#{error_fields_and_values.keys.join(', ')}) " +
                    "VALUES ('#{error_fields_and_values.values.join("', '")}')"
       sql_return_value = DecoError.connection.execute(sql_string)
+
       puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
       p sql_string
       puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-      p sql_return_value
+      p sql_return_value.status
       puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-      p sql_return_value.class
+      p sql_return_value['status']
       puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
     end
 
