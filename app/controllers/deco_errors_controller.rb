@@ -84,6 +84,15 @@ class DecoErrorsController < ApplicationController
       p 'DecoError.connection.execute(sql_string).to_a.first'
       p DecoError.connection.execute(sql_string).to_a.first
       puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+      p 'DecoError.connection.execute(sql_string).fields'
+      p DecoError.connection.execute(sql_string).fields
+      puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+      p 'DecoError.connection.execute(sql_string).fields.class'
+      p DecoError.connection.execute(sql_string).fields.class
+      puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+      p 'DecoError.connection.execute(sql_string).fields == []'
+      p DecoError.connection.execute(sql_string).fields == []
+      puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
       p sql_insert_success
       puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
     end
