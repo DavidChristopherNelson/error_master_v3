@@ -72,7 +72,7 @@ class DecoErrorsController < ApplicationController
       puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
       p sql_string
       puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-      p sql_return_value.status
+      p sql_return_value.cmd_status
       puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
       p sql_return_value['status']
       puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
