@@ -75,6 +75,9 @@ class DecoErrorsController < ApplicationController
       end
     end
     respond_to do |format|
+      puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+      p sql_insert_success
+      puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
       if sql_insert_success
         puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
         p 'sql_insert_success is true and I am returning status: 200'
