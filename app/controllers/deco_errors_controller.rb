@@ -73,6 +73,8 @@ class DecoErrorsController < ApplicationController
       puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
       p sql_return_value
       puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+      p sql_return_value.class
+      puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
     end
 
     respond_to do |format|
