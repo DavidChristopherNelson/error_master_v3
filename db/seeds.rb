@@ -18,8 +18,8 @@ end
 def standardise_field_names(error)
   error['filter_id'] = '1'
   error['folder_id'] = '1'
-  error['created_at'] = '2022-02-09'
-  error['updated_at'] = '2022-02-09'
+  error['created_at'] = "#{Time.now}"
+  error['updated_at'] = "#{Time.now}"
   error['error_type'] = error['type']
   error['parameters'] = error['params']
   error['read'] = false

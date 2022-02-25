@@ -67,13 +67,12 @@ class DecoErrorsController < ApplicationController
       error_fields_and_values['updated_at'] = "#{Time.now}"
       sql_string = "INSERT INTO deco_errors (#{error_fields_and_values.keys.join(', ')}) " +
                    "VALUES ('#{error_fields_and_values.values.join("', '")}')"
-      puts '====================================================================================='
-      p sql_string
-      puts '====================================================================================='      
       sql_return_value = DecoError.connection.query(sql_string)
-      puts '====================================================================================='
+      puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+      p sql_string
+      puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
       p sql_return_value
-      puts '====================================================================================='
+      puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
     end
 
     respond_to do |format|
