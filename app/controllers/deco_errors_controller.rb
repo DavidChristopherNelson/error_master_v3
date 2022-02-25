@@ -69,8 +69,8 @@ class DecoErrorsController < ApplicationController
                    "VALUES ('#{error_fields_and_values.values.join("', '")}')"
 
       # I can't figure out how to get the status of a PG::result object 
-      # directly so I check if I can access the first element of the array instead.
-      sql_insert_success = !!DecoError.connection.execute(sql_string).to_a.first
+      # directly so I do this instead.
+      sql_insert_success = !!DecoError.connection.execute(sql_string)
 
       puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
       p sql_string
@@ -78,26 +78,19 @@ class DecoErrorsController < ApplicationController
       p 'DecoError.connection.execute(sql_string)'
       p DecoError.connection.execute(sql_string)
       puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-      p 'DecoError.connection.execute(sql_string).to_a'
-      p DecoError.connection.execute(sql_string).to_a
+      p '!!DecoError.connection.execute(sql_string).to_a'
+      p !!DecoError.connection.execute(sql_string).to_a
       puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-      p 'DecoError.connection.execute(sql_string).to_a.first'
-      p DecoError.connection.execute(sql_string).to_a.first
-      puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-      p 'DecoError.connection.execute(sql_string).fields'
-      p DecoError.connection.execute(sql_string).fields
-      puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-      p 'DecoError.connection.execute(sql_string).fields.class'
-      p DecoError.connection.execute(sql_string).fields.class
-      puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-      p 'DecoError.connection.execute(sql_string).fields == []'
-      p DecoError.connection.execute(sql_string).fields == []
-      puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+      p 'sql_insert_success'
       p sql_insert_success
       puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
     end
 
     respond_to do |format|
+      if sql_insert_success
+        format.json do
+          render status: 200
+        end
       if @deco_error.save
         @deco_error.folders << Folder.find(1)
         @deco_error.folders << Folder.find(2)
@@ -107,10 +100,6 @@ class DecoErrorsController < ApplicationController
           render(template: '/deco_errors/show.js.erb',
                  layout: false
                 )
-        end
-      elsif sql_insert_success
-        format.json do
-          render status: 200
         end
       else        
         @failed_resource = @deco_error
