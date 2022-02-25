@@ -37,6 +37,7 @@ class DecoErrorsController < ApplicationController
   # POST /deco_errors
   # POST /deco_errors.json
   def create
+    sql_insert_success = nil
     time_it('create_error') do |_|
       @deco_error = DecoError.new
 
