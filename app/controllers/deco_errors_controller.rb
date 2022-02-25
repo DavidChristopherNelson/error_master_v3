@@ -67,12 +67,15 @@ class DecoErrorsController < ApplicationController
       error_fields_and_values['updated_at'] = "#{Time.now}"
       sql_string = "INSERT INTO deco_errors (#{error_fields_and_values.keys.join(', ')}) " +
                    "VALUES ('#{error_fields_and_values.values.join("', '")}')"
-      sql_return_value = DecoError.connection.execute(sql_string)
+
+      # I can't figure out how to get the status of a PG::result object 
+      # directly so I check if I can access the first element of the array instead.
+      sql_insert_success = !!DecoError.connection.execute(sql_string).to_a.first
 
       puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
       p sql_string
       puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-      p pg_result_status(sql_return_value)
+      p sql_insert_success
       puts '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
     end
 
@@ -87,7 +90,11 @@ class DecoErrorsController < ApplicationController
                  layout: false
                 )
         end
-      else
+      elsif sql_insert_success
+        format.json do
+          render status: 200
+        end
+      else        
         @failed_resource = @deco_error
         deco_error_show_action_variables
         @form_params = { deco_error: @deco_error }
