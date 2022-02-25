@@ -64,7 +64,7 @@ class DecoErrorsController < ApplicationController
       error_fields_and_values['created_at'] = "#{Time.now}"
       error_fields_and_values['updated_at'] = "#{Time.now}"
       sql_string = "INSERT INTO deco_errors (#{error_fields_and_values.keys.join(', ')}) " +
-                   "VALUES ('#{error_fields_and_values.values.join("', '")}')"
+                   "VALUES (\"#{error_fields_and_values.values.join("\", \"")}\"")"
       puts '====================================================================================='
       p sql_string
       puts '====================================================================================='      
