@@ -38,21 +38,19 @@ class DecoErrorsController < ApplicationController
   # POST /deco_errors.json
   def create
     @deco_error = DecoError.new
-
     # The if/else clause determines if the request was sent from Error Master
     # or from a third party site. (The third party site won't have an 
     # authenticity_token)
-    excluded_fields = %w[id filter_id created_at updated_at]
+    excluded_fields = %w[id folder_id filter_id created_at updated_at]
     if params['authenticity_token']
       converted_json = JSON[params[:deco_error][:json]]
       @deco_error.attributes.each_key do |field|
         next if converted_json[field].nil?
         next if excluded_fields.include?(field)
-
         @deco_error[field] = converted_json[field]
-        @deco_error['filter_id'] = 1
-        @deco_error['folder_id'] = 1
       end
+      @deco_error['filter_id'] = 1
+      @deco_error['folder_id'] = 1
     else
       error_fields_and_values = {}
       params['json'].each do |pair|
@@ -86,9 +84,7 @@ class DecoErrorsController < ApplicationController
           render status: 200
         end
       elsif @deco_error.save
-        @deco_error.folders << Folder.find(1)
-        @deco_error.folders << Folder.find(2)
-        @folder = Folder.find(2)
+        @folder = Folder.find(@deco_error.folder_id)
         deco_error_show_action_variables
         format.js do
           render(template: '/deco_errors/show.js.erb',
