@@ -6,6 +6,15 @@ class RuleEngineWorker
   include RuleEngine
   include ComputeLogic
 
+  # Initiates a background process to run the rule engine according to the
+  # parameters passed in. These parameters must follow the convention described
+  # for RuleEngine::get_error_and_filter_data.
+  #
+  # @param [hash] follow the convention describe in 
+  #   RuleEngine::get_error_and_filer_data
+  # @return [String?] A unique job id for the worker which can be used to query
+  #   for the status of the worker. See app/views/folders/show.js.erb for an 
+  #   example of this. 
   def perform(resource)
     at(1)
     error_data, filter_data = get_error_and_filter_data(resource)

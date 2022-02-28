@@ -37,12 +37,11 @@ class DecoErrorsController < ApplicationController
   # POST /deco_errors
   # POST /deco_errors.json
   def create
-    sql_insert_success = nil
-
     @deco_error = DecoError.new
 
     # The if/else clause determines if the request was sent from Error Master
-    # or from a third party site.
+    # or from a third party site. (The third party site won't have an 
+    # authenticity_token)
     excluded_fields = %w[id filter_id created_at updated_at]
     if params['authenticity_token']
       converted_json = JSON[params[:deco_error][:json]]
@@ -60,21 +59,26 @@ class DecoErrorsController < ApplicationController
         next if pair[1].nil? || pair[1] == ''
         next if excluded_fields.include?(pair[0])
         # The gsub removes all ' and " from the string. I do this because 
-        # can't figure out how to escape these characters.
+        # can't figure out how to escape and sql INSERT these characters.
         error_fields_and_values[pair[0]] = pair[1].gsub(/'|"/, "")
       end
       error_fields_and_values['filter_id'] = '1'
       error_fields_and_values['folder_id'] = '1'
       error_fields_and_values['created_at'] = "#{Time.now}"
       error_fields_and_values['updated_at'] = "#{Time.now}"
-      sql_string = "INSERT INTO deco_errors (#{error_fields_and_values.keys.join(', ')}) " +
-                   "VALUES ('#{error_fields_and_values.values.join("', '")}')"
+      keys = error_fields_and_values.keys.join(', ')
+      values = error_fields_and_values.values.join("', '")
+      sql_string = "INSERT INTO deco_errors (#{keys}) " +
+                   "VALUES ('#{values}')" + 
+                   "RETURNING id"
 
       # I can't figure out how to get the status of a PG::result object 
-      # directly so I do this instead.
-      sql_insert_success = !!DecoError.connection.execute(sql_string)
+      # directly so I do this instead to determine if the error has been saved.
+      error_id = DecoError.connection.execute(sql_string)
+      Rails.logger.info "The newly created error's id is #{error_id}"
+      sql_insert_success = true
     end
-      
+
     respond_to do |format|
       if sql_insert_success
         format.json do
