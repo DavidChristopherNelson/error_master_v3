@@ -17,6 +17,7 @@ class DecoErrorsController < ApplicationController
     deco_error_show_action_variables
 
     @folder = @deco_error.folder
+    @deco_error.update(read: true)
     respond_to do |format|
       format.js do
         render(template: '/deco_errors/show.js.erb',

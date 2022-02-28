@@ -21,17 +21,16 @@
               local: false do |form| %>
   <%= form.hidden_field :folder_id, value: @folder.id %>
   <% @deco_errors.each do |deco_error| %>
-    <div class="layer horizontal-container">
+    <div class="layer horizontal-container <%= 'read' if deco_error.read %>">
       <div class="left">
         <input type="checkbox" 
              value=<%= "#{deco_error.id}" %> 
-             name="id[]" 
+             name="id[]"
              id="id_<%= "#{deco_error.id}" %>"
              class="error-checkbox">
         <%= link_to deco_error_path(id: deco_error.id), remote: true do %>
           <h3><%= deco_error.title %></h3>
         <% end %>
-        <p><%= " read: #{deco_error.read}" %></p>
       </div>
     </div>
   <% end %>
