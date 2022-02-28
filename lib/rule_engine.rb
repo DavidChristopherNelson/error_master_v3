@@ -6,7 +6,7 @@ module RuleEngine
   #
   # @param [hash] provides resource information. Two keys; :controller and :id.
   #               {controller: "filters", id: 33}
-  # @option :controller must be either "filter" or "folder"
+  # @option :controller must be either "filter", "folder" or "deco_error"
   # @return [array] returns error and filter data. First element contains error
   #                 data and the second element contains filter data.
   def get_error_and_filter_data(resource)

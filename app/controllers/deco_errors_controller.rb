@@ -74,13 +74,11 @@ class DecoErrorsController < ApplicationController
 
       # I can't figure out how to get the status of a PG::result object 
       # directly so I do this instead to determine if the error has been saved.
-      error_info = DecoError.connection.execute(sql_string)
-      puts "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-      puts "error_info[0]['id'].class: #{error_info[0]['id'].class}"
-      puts "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-      Rails.logger.info "error_info: #{error_info}, error_info[0]: #{error_info[0]}, error_info[0]['id']: #{error_info[0]['id']}"
-      Rails.logger.debug "error_info: #{error_info}, error_info[0]: #{error_info[0]}, error_info[0]['id']: #{error_info[0]['id']}"
-      sql_insert_success = true
+      error_id = DecoError.connection.execute(sql_string)[0]['id']
+      sql_insert_success = !!error_id
+      Rails.logger.info "params[:controller]: #{params[:controller]}"
+      resource = { controller: params[:controller], id: error_id }
+      RuleEngineWorker.perform_async(resource)
     end
 
     respond_to do |format|
