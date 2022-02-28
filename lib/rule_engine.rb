@@ -6,17 +6,20 @@ module RuleEngine
   #
   # @param [hash] provides resource information. Two keys; :controller and :id.
   #               {controller: "filters", id: 33}
-  # @option :controller must be either "filter", "folder" or "deco_error"
+  # @option :controller must be either "filter", "folder" or "deco_errors"
   # @return [array] returns error and filter data. First element contains error
   #                 data and the second element contains filter data.
   def get_error_and_filter_data(resource)
     # parameter checking
     raise(ArguementError, 'Argument must have :controller key.') if resource['controller'].nil?
 
-    unless resource['controller'] == 'folders' || resource['controller'] == 'filters'
+    unless resource['controller'] == 'folders' || 
+           resource['controller'] == 'filters' || 
+           resource['controller'] == 'deco_errors'
+
       raise(ArgumentError,
-            "Argument :controller key must be either 'folders' or 'filters' " +
-              "instead it is #{resource['controller']}"
+            "Argument :controller key must be either 'folders', 'filters' " +
+              "or 'deco_errors' instead it is '#{resource['controller']}'"
            )
     end
     unless resource['id'].instance_of?(Integer)
@@ -37,14 +40,15 @@ module RuleEngine
     end
 
     # get error data
-    error_data = []
     case resource['controller']
+    when 'deco_errors'
+      sql_statement = "SELECT #{get_rule_fields.join(', ')}, id " +
+        'FROM deco_errors ' +
+        "WHERE id = #{resource['id']}"
     when 'folders'
-
       sql_statement = "SELECT #{get_rule_fields.join(', ')}, id " +
         'FROM deco_errors ' +
         "WHERE folder_id = #{resource['id']}"
-      error_data = DecoError.connection.execute(sql_statement).to_a
     when 'filters'
       filter_ids = []
       filter_data.each { |filter| filter_ids << filter['id'] }
@@ -54,8 +58,8 @@ module RuleEngine
         'FROM deco_errors ' +
         'WHERE filter_id ' +
         "IN (#{filter_ids.join(', ')})"
-      error_data = DecoError.connection.execute(sql_statement).to_a
     end
+    error_data = DecoError.connection.execute(sql_statement).to_a
 
     # return data
     [error_data, filter_data]

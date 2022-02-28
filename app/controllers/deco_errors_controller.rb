@@ -76,7 +76,6 @@ class DecoErrorsController < ApplicationController
       # directly so I do this instead to determine if the error has been saved.
       error_id = DecoError.connection.execute(sql_string)[0]['id']
       sql_insert_success = !!error_id
-      Rails.logger.info "params[:controller]: #{params[:controller]}"
       resource = { controller: params[:controller], id: error_id }
       RuleEngineWorker.perform_async(resource)
     end
