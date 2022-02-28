@@ -75,7 +75,7 @@ class DecoErrorsController < ApplicationController
       # I can't figure out how to get the status of a PG::result object 
       # directly so I do this instead to determine if the error has been saved.
       error_id = DecoError.connection.execute(sql_string)
-      Rails.logger.info "The newly created error's id is #{error_id}"
+      Rails.logger.debug "error_info: #{error_info}, error_info[0]: #{error_info[0]}, error_info[0]['id']: #{error_info[0]['id']}"
       sql_insert_success = true
     end
 
