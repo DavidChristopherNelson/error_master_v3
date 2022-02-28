@@ -76,7 +76,7 @@ class DecoErrorsController < ApplicationController
       # directly so I do this instead to determine if the error has been saved.
       error_info = DecoError.connection.execute(sql_string)
       puts "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-      puts "error_info: #{error_info}, error_info[0]: #{error_info[0]}, error_info[0]['id']: #{error_info[0]['id']}"
+      puts "error_info[0]['id'].class: #{error_info[0]['id'].class}"
       puts "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
       Rails.logger.info "error_info: #{error_info}, error_info[0]: #{error_info[0]}, error_info[0]['id']: #{error_info[0]['id']}"
       Rails.logger.debug "error_info: #{error_info}, error_info[0]: #{error_info[0]}, error_info[0]['id']: #{error_info[0]['id']}"
