@@ -3,12 +3,20 @@ module ShowActionVariables
     side_bar_variables
     top_bar_variables
 
-    # @fields is for the search bar.
-    @fields = DecoError.new.attributes.keys
-    @pagelimit = 50
-    @page_number = params[:move_to_page].nil? ? 0 : Integer(params[:move_to_page], 10)
-    @max_page_num = @folder.deco_errors.count / (@pagelimit + 1)
     search_and_pagination
+    @pagelimit = 50
+    @max_page_num = @deco_errors.count / (@pagelimit + 1)
+    if params[:move_to_page].nil?
+      @page_number = 0
+    elsif params[:move_to_page].to_i < 0
+      @page_number = 0
+    elsif params[:move_to_page].to_i > @max_page_num
+      @page_number = 0
+    else
+      @page_number = Integer(params[:move_to_page], 10)
+    end
+    @deco_errors = @deco_errors.limit(@pagelimit)
+                               .offset(@page_number * @pagelimit)
   end
 
   def filter_show_action_variables
@@ -49,17 +57,27 @@ module ShowActionVariables
   end
 
   def search_and_pagination
-    if params[:field].nil?
+    field = params[:field]
+    value = params[:value]
+    if params[:previous_searches].nil? # No pagination or search
+      @previous_searches = nil
       @deco_errors = @folder.deco_errors
-                            .limit(@pagelimit)
-                            .offset(@page_number * @pagelimit)
-    else
-      field = params[:field]
-      value = params[:value]
+    elsif params[:previous_searches] == "" && field.nil? # pagination without search
+      @previous_searches = nil
+      @deco_errors = @folder.deco_errors  
+    elsif params[:previous_searches] == "" # first search
+      @previous_searches = [[field, value]].to_json
       @deco_errors = @folder.deco_errors
                             .where("#{field} like ?", "%#{value}%")
-                            .limit(@pagelimit)
-                            .offset(@page_number * @pagelimit)
+    else # previous searches
+      @previous_searches = JSON(params[:previous_searches])
+      @previous_searches << [field, value] unless field.nil?
+      @deco_errors = @folder.deco_errors
+      @previous_searches.each do |search|
+        @deco_errors = @deco_errors
+                         .where("#{search[0]} like ?", "%#{search[1]}%")
+      end
+      @previous_searches = @previous_searches.to_json
     end
   end
 
@@ -80,9 +98,27 @@ module ShowActionVariables
     @filters = Filter.order(:execution_order)
     @filter_new = Filter.new
     @folders = Folder.hierarchy_order
+
+    @taken_execution_orders_array = []
+    @filters.each do |filter|
+      @taken_execution_orders_array << filter.execution_order
+    end
+    @taken_execution_orders = @taken_execution_orders_array[0..-2].join(", ") +
+                              " and #{@taken_execution_orders_array[-1]}"
+
+    @lowest_available_execution_order = nil
+    (@taken_execution_orders_array.max + 2).times do |num|
+      unless @taken_execution_orders_array.include? num
+        @lowest_available_execution_order = num
+        break
+      end
+    end
+
     @new_filter_form_params = {
       filter_new: @filter_new,
-      folders: @folders
+      folders: @folders,
+      taken_execution_orders: @taken_execution_orders,
+      lowest_available_execution_order: @lowest_available_execution_order
     }
     @new_error_form_params = {
       deco_error: @deco_error_new
@@ -90,5 +126,6 @@ module ShowActionVariables
     @export = {
       export_data: 'XXXX'
     }
+    @fields = DecoError.new.attributes.keys
   end
 end

@@ -23,11 +23,13 @@
   <% @deco_errors.each do |deco_error| %>
     <div class="layer horizontal-container <%= 'read' if deco_error.read %>">
       <div class="left">
-        <input type="checkbox" 
-             value=<%= "#{deco_error.id}" %> 
-             name="id[]"
-             id="id_<%= "#{deco_error.id}" %>"
-             class="error-checkbox">
+        <div>
+          <input type="checkbox" 
+               value=<%= "#{deco_error.id}" %> 
+               name="id[]"
+               id="id_<%= "#{deco_error.id}" %>"
+               class="error-checkbox">
+        </div>
         <%= link_to deco_error_path(id: deco_error.id), remote: true do %>
           <h3><%= deco_error.title %></h3>
         <% end %>
@@ -44,6 +46,7 @@
       <%= image_tag "chevron-left.svg", class: "icon visibility-hidden" %>
     <% else %>
       <%= link_to folder_path(id: @folder.id, 
+                              previous_searches: @previous_searches,
                               move_to_page: @page_number.to_i - 1),
                   remote: true do %>
         <%= image_tag "chevron-left.svg", class: "icon" %>
@@ -56,11 +59,23 @@
       <%= image_tag "chevron-right.svg", class: "icon visibility-hidden" %>
     <% else %>
       <%= link_to folder_path(id: @folder.id, 
+                              previous_searches: @previous_searches,
                               move_to_page: @page_number.to_i + 1),
-                  remote: true do %>
+                              remote: true do %>
         <%= image_tag "chevron-right.svg", class: "icon" %>
       <% end %>
     <% end %>
   </div>
+  <div></div>
+</div>
+<div class="layer">
+  <div></div>
+  <%= form_with path: 'folder', 
+                method: :get, 
+                local: false do |form| %>
+    <%= form.hidden_field :previous_searches, value: @previous_searches %>
+    <%= form.text_field :move_to_page, id: 'page-nav-input-field' %>
+    <%= form.submit "Go" %>
+  <% end %>
   <div></div>
 </div>

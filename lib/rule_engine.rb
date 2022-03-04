@@ -11,7 +11,9 @@ module RuleEngine
   #                 data and the second element contains filter data.
   def get_error_and_filter_data(resource)
     # parameter checking
-    raise(ArguementError, 'Argument must have :controller key.') if resource['controller'].nil?
+    if resource['controller'].nil?
+      raise(ArguementError, 'Argument must have :controller key.')
+    end
 
     unless resource['controller'] == 'folders' || 
            resource['controller'] == 'filters' || 
@@ -95,10 +97,10 @@ module RuleEngine
   def hit_filter_cache
     return_value = Rails.cache.fetch(Filter.cache_key) do
       rule_data = hit_rule_cache
-      sql_filter_command = 'SELECT filters.id, filters.logic, filters.folder_id ' +
+      sql_filter_command = 'SELECT filters.id, filters.logic, ' +
+                                  'filters.folder_id ' +
                            'FROM filters ORDER BY filters.execution_order'
       filter_data = Filter.connection.execute(sql_filter_command).to_a
-
       filter_data.each { |filter| filter[:rules] = [] }
 
       rule_data.each do |rule|
@@ -128,7 +130,6 @@ module RuleEngine
                           FROM filters
                           INNER JOIN rules
                           ON filters.id = rules.filter_id'
-
       rule_data = Rule.connection.execute(sql_rule_command).to_a
     end
   end

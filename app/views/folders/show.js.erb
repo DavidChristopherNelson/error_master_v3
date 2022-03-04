@@ -54,7 +54,8 @@ close_modal.forEach(function(close) {
 // Check all button 
 var check_all_button = document.querySelector(".check-all");
 check_all_button.addEventListener("click", (event) => {
-  document.querySelectorAll('input[class=error-checkbox]').forEach(function(checkbox) {
+  document.querySelectorAll('input[class=error-checkbox]')
+          .forEach(function(checkbox) {
     checkbox.click();
   });
 });
@@ -71,6 +72,11 @@ unread_submit_button.addEventListener("click", (event) => {
 });
 
 // Background Rule Engine
+// Uses a recursive call to query the rule engine background process for its
+// progress status. 
+//
+// @param DOM object This is the object that represents the moving element in
+//   the progress bar. it's percentage width will change.
 function queryForPercentage (progress_bar) {
   fetch('/workers/<%= @rule_engine_id %>')
     .then(response => response.json())

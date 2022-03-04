@@ -6,13 +6,36 @@
   <% end %>
   <h1 class="white"> 
     <%= @deco_error.title %>
+    <%= link_to folder_path(id: @folder.id, 
+                            ignore: {'field' => 'remote_ip',
+                                     'value' => @deco_error.remote_ip}), 
+                            remote: true do %>
+      <%= image_tag("thumb-down.svg", class: "icon") %>
+    <% end %>
   </h1>
+  <%= link_to deco_error_path(id: @deco_error.id, folder_id: @folder.id), 
+              method: :delete,
+              remote: true do %>
+    <%= image_tag("trash.svg", class: "icon white") %>
+  <% end %>
 </div>
 <div class="top-bar-modals">
-    <%= render partial: "/shared/modal", 
-               locals: {modal_id: "new-filter",
-                        form_id: "new-filter-form",
-                        title: "Create filter",
-                        form_path: "filters/new",
-                        form_params: @new_filter_form_params} %>
+  <%= render partial: "/shared/modal", 
+             locals: {modal_id: "new-decoerror",
+                      form_id: "new-decoerror-form",
+                      title: "Create error",
+                      form_path: "deco_errors/new",
+                      form_params: @new_error_form_params} %>
+  <%= render partial: "/shared/modal", 
+             locals: {modal_id: "new-filter",
+                      form_id: "new-filter-form",
+                      title: "Create filter",
+                      form_path: "filters/new",
+                      form_params: @new_filter_form_params} %>
+  <%= render partial: "/shared/modal", 
+             locals: {modal_id: "export",
+                      form_id: "export-form",
+                      title: "Export data",
+                      form_path: "application/export",
+                      form_params: @export} %>
 </div>

@@ -13,13 +13,25 @@ class FoldersController < ApplicationController
 
   # GET /folders/1
   # GET /folders/1.json
+  # Displays the folder information. Uses ShowActionVariables.rb in /lib
+  #
+  # @param [hash] xxx
+  # @option 'rule_engine' = truthy
+  #   Pass this option in to run the rule engine on this folder
+  # @option 'ignore' = {'field'=>'XXX', 'value'=>'XXX'}
+  #   Pass this option in to create a rule to ignore errors with the field and
+  #   value of the one just viewed.
+  # @return app/views/folders/show.js.erb
   def show
-    resource = { controller: params[:controller], id: params[:id].to_i }
     if params['rule_engine']
+      resource = { controller: params[:controller], id: params[:id].to_i }
       @rule_engine_id = RuleEngineWorker.perform_async(resource)
+    elsif params['ignore']
+      field = params['ignore']['field']
+      value = params['ignore']['value']
+      Rule.create(filter_id: 2, field: field.to_s, value: value.to_s)
     end
     folder_show_action_variables
-
     respond_to do |format|
       format.js do
         render(template: '/folders/show.js.erb',
@@ -69,15 +81,14 @@ class FoldersController < ApplicationController
   # PATCH/PUT /folders/1.json
   def update
     respond_to do |format|
+      folder_show_action_variables
       if @folder.update(folder_params)
-        folder_show_action_variables
         format.js do
           render(template: '/folders/show.js.erb',
                  layout: false
                 )
         end
       else
-        folder_show_action_variables
         @failed_resource = @folder
         @form_params = {
           folder: @folder,
@@ -95,12 +106,14 @@ class FoldersController < ApplicationController
   # DELETE /folders/1
   # DELETE /folders/1.json
   def destroy
-    @folder.deco_errors.each do |deco_error|
-      DecoError.connection.exec_update(<<-EOQ, 'SQL', [[nil, '1']])
-        UPDATE  deco_errors
-        SET     folder_id = $1
-        WHERE   id = #{deco_error['id']}
-      EOQ
+    Folder.find(@folder.find_sub_folders([])).each do |folder|
+      folder.deco_errors.each do |deco_error|
+        DecoError.connection.exec_update(<<-EOQ, 'SQL', [[nil, '1']])
+          UPDATE  deco_errors
+          SET     folder_id = $1
+          WHERE   id = #{deco_error['id']}
+        EOQ
+      end
     end
     @folder.destroy!
     # Display the 'All' folder upon deletion.

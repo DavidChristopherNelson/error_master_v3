@@ -50,6 +50,8 @@
     then it tries to match with rule 4.
   </div>
   <div class="layer">
-    <%= form.submit "Submit Changes" %>
+    <% unless [1, 2].include? form_params[:filter][:folder_id] %>
+      <%= form.submit "Submit Changes" %>
+    <% end %>
   </div>
 <% end %>

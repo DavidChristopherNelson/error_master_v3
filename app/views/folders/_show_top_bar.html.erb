@@ -19,7 +19,7 @@
               class="display-none">
     </button>
     <button type="submit" 
-            name="submission_data" 
+            name="submission_data"
             value="routeToDecoErrorUpdate"
             form="bulk_action"
             id="mark-as-unread-button">
@@ -47,6 +47,7 @@
                 method: :get, 
                 class: "search-bar right",
                 local: false) do |form| %>
+    <%= form.hidden_field :previous_searches, value: @previous_searches %>
     <%= form.text_field :value %>
     <%= form.select :field, @fields, 
                     selected: "title" %>
@@ -63,16 +64,16 @@
                       title: "Create error",
                       form_path: "deco_errors/new",
                       form_params: @new_error_form_params} %>
-    <%= render partial: "/shared/modal", 
-               locals: {modal_id: "new-filter",
-                        form_id: "new-filter-form",
-                        title: "Create filter",
-                        form_path: "filters/new",
-                        form_params: @new_filter_form_params} %>
-    <%= render partial: "/shared/modal", 
-               locals: {modal_id: "export",
-                        form_id: "export-form",
-                        title: "Export data",
-                        form_path: "application/export",
-                        form_params: @export} %>
+  <%= render partial: "/shared/modal", 
+             locals: {modal_id: "new-filter",
+                      form_id: "new-filter-form",
+                      title: "Create filter",
+                      form_path: "filters/new",
+                      form_params: @new_filter_form_params} %>
+  <%= render partial: "/shared/modal", 
+             locals: {modal_id: "export",
+                      form_id: "export-form",
+                      title: "Export data",
+                      form_path: "application/export",
+                      form_params: @export} %>
 </div>

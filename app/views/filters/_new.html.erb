@@ -31,8 +31,14 @@
   <div class="layer">
     <div class="left"> 
       <%= form.label :execution_order %>
-      <%= form.number_field :execution_order %>
+      <%= form.number_field :execution_order, 
+                            value: form_params[:lowest_available_execution_order] %>
     </div>
+  </div>
+  <div class="clarifier">
+    The following execution orders are reserved for other filters. Please pick 
+    a number that is not on this list. <br>
+    <%= form_params[:taken_execution_orders] %>
   </div>
   <div class="layer">
     <div class="left"> 

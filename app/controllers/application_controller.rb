@@ -15,5 +15,5 @@ class ApplicationController < ActionController::Base
     cached_data = Rails.cache.fetch('rules') do
       rule_data_in_array
     end
- end
+  end
 end

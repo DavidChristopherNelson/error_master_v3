@@ -7,7 +7,8 @@ class Filter < ApplicationRecord
   validates :name, presence: true,
                    length: { maximum: 50 },
                    uniqueness: true
-  validates :execution_order, uniqueness: true
+  validates :execution_order, presence: true,
+                              uniqueness: true
 
   # Returns a cache key that is different every time a Filter or Rule
   # object is created, deleted or updated.

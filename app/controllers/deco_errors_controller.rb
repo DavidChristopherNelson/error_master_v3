@@ -40,7 +40,7 @@ class DecoErrorsController < ApplicationController
   def create
     @deco_error = DecoError.new
     # The if/else clause determines if the request was sent from Error Master
-    # or from a third party site. (The third party site won't have an 
+    # or from a third party site. (The third party site won't have an
     # authenticity_token)
     excluded_fields = %w[id folder_id filter_id created_at updated_at]
     if params['authenticity_token']
@@ -48,6 +48,7 @@ class DecoErrorsController < ApplicationController
       @deco_error.attributes.each_key do |field|
         next if converted_json[field].nil?
         next if excluded_fields.include?(field)
+
         @deco_error[field] = converted_json[field]
       end
       @deco_error['filter_id'] = 1
@@ -57,21 +58,22 @@ class DecoErrorsController < ApplicationController
       params['json'].each do |pair|
         next if pair[1].nil? || pair[1] == ''
         next if excluded_fields.include?(pair[0])
-        # The gsub removes all ' and " from the string. I do this because 
+
+        # The gsub removes all ' and " from the string. I do this because
         # can't figure out how to escape and sql INSERT these characters.
-        error_fields_and_values[pair[0]] = pair[1].gsub(/'|"/, "")
+        error_fields_and_values[pair[0]] = pair[1].gsub(/'|"/, '')
       end
       error_fields_and_values['filter_id'] = '1'
       error_fields_and_values['folder_id'] = '1'
-      error_fields_and_values['created_at'] = "#{Time.now}"
-      error_fields_and_values['updated_at'] = "#{Time.now}"
+      error_fields_and_values['created_at'] = Time.now.to_s
+      error_fields_and_values['updated_at'] = Time.now.to_s
       keys = error_fields_and_values.keys.join(', ')
       values = error_fields_and_values.values.join("', '")
       sql_string = "INSERT INTO deco_errors (#{keys}) " +
-                   "VALUES ('#{values}')" + 
-                   "RETURNING id"
+        "VALUES ('#{values}')" +
+        'RETURNING id'
 
-      # I can't figure out how to get the status of a PG::result object 
+      # I can't figure out how to get the status of a PG::result object
       # directly so I do this instead to determine if the error has been saved.
       error_id = DecoError.connection.execute(sql_string)[0]['id']
       sql_insert_success = !!error_id
@@ -82,7 +84,7 @@ class DecoErrorsController < ApplicationController
     respond_to do |format|
       if sql_insert_success
         format.json do
-          render status: 200
+          render(status: :ok)
         end
       elsif @deco_error.save
         @folder = Folder.find(@deco_error.folder_id)
@@ -92,7 +94,7 @@ class DecoErrorsController < ApplicationController
                  layout: false
                 )
         end
-      else        
+      else
         @failed_resource = @deco_error
         deco_error_show_action_variables
         @form_params = { deco_error: @deco_error }
@@ -118,7 +120,14 @@ class DecoErrorsController < ApplicationController
   def destroy
     @deco_errors&.each(&:destroy!)
     @folder = Folder.find(params[:folder_id])
-    redirect_to(@folder)
+    folder_show_action_variables
+    respond_to do |format|
+      format.js do
+        render(template: '/folders/show.js.erb',
+               layout: false
+              )
+      end
+    end
   end
 
   private

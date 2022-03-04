@@ -28,15 +28,14 @@ class RulesController < ApplicationController
     @filter = Filter.find(@rule&.filter_id)
 
     respond_to do |format|
+      filter_show_action_variables
       if @rule.save
-        filter_show_action_variables
         format.js do
           render(template: '/filters/show.js.erb',
                  layout: false
                 )
         end
       else
-        filter_show_action_variables
         @failed_resource = @rule
         @form_params = @new_rule_form_params
         @form_params[:rule] = @rule
@@ -54,15 +53,14 @@ class RulesController < ApplicationController
   def update
     @filter = Filter.find(@rule&.filter_id)
     respond_to do |format|
+      filter_show_action_variables
       if @rule.update(rule_params)
-        filter_show_action_variables
         format.js do
           render(template: '/filters/show.js.erb',
                  layout: false
                 )
         end
       else
-        filter_show_action_variables
         @failed_resource = @rule
         @edit_rule_form_params[@rule.id.to_s][:rule] = @rule
         @form_params = @edit_rule_form_params[@rule.id.to_s]

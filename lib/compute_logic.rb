@@ -14,13 +14,21 @@ module ComputeLogic
   end
 
   # Returns the filter logic in the form of an array of rule ids and operators.
+  # This relies on the Ignore filter having an execution order of 1.
   #
   # @param [Hash] A hash containing filter information. Requires the :logic key
   # @return [Array of strings] Contains rule ids, '!', '&&', '||', '('' and ')'
   # ['91', '&&', '92', '&&', '93']
   def format_logic(filter)
     logic = filter[:logic]
-    if logic.nil?
+    if filter[:id] == 2 # The ignore filter
+      logic = []
+      filter[:rules].each do |rule|
+        logic << rule['id'].to_s
+        logic << '||'
+      end
+      logic = logic[0..-2]
+    elsif logic.nil?
       logic = []
       filter[:rules].each do |rule|
         logic << rule['id'].to_s

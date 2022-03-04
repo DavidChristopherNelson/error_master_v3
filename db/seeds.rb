@@ -33,18 +33,18 @@ end
 # Setup default folder and filter structure.
 Folder.create(name: 'Uncategorized',
               user_created: false
-             )
+             ) # id = 1
 Filter.create(folder_id: 1,
               name: 'Uncategorized filter',
               execution_order: 0
-             )
+             ) # id = 1
 Folder.create(name: 'Ignore',
               user_created: false
-             )
+             ) # id = 2
 Filter.create(folder_id: 2,
               name: 'Ignore filter',
               execution_order: 1
-             )
+             ) # id = 2
 
 Folder.create(name: 'Bad descript',
               user_created: true
@@ -98,14 +98,14 @@ fields = %i[title priority request_id remote_ip controller action]
   end
 end
 
-# Setup 10,000 errors
+# Setup 1000 errors
 error_data = []
 Dir['*/errors/*'].each do |path|
   error_data << JSON.parse(File.read(path))
 end
 fields = DecoError.attribute_names[1..-1]
 
-100.times do |iteration|
+10.times do |iteration|
   bulk_insert = []
   error_data.each do |error|
     values = []

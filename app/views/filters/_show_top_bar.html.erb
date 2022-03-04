@@ -1,6 +1,16 @@
 <div class="left">
   <%= image_tag("logo_text_horizontal_black.svg", class: "logo white") %>
   <%= render "/shared/dropdown_menu", filters: @filters  %>
+  <div class="indentation"></div>
+  <h1 class="white"><%= @filter.name %></h1>
+  <%= link_to filter_path(id: @filter.id), 
+              method: :delete,
+              data: { confirm: "Are you sure?" },
+              remote: true do %>
+    <% unless [1, 2].include? @filter.id %>
+      <%= image_tag("trash.svg", class: "icon white") %>
+    <% end %>
+  <% end %>
 </div>
 <div class="top-bar-modals">
   <%= render partial: "/shared/modal", 

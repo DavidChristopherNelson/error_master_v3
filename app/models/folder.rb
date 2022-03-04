@@ -75,4 +75,21 @@ class Folder < ApplicationRecord
       ancestor_count += 1
     end
   end
+
+  # Uses a recursive call to find and return all subfolder ids of the current
+  # folder.
+  #
+  # @params [Array] Must be empty.
+  # @return [Array] containing ids of the folder's sub-folders.
+  def find_sub_folders(ids)
+    ids << id
+    sql_statement = "SELECT id FROM folders WHERE parent_id = #{id}"
+    sub_folder_ids = Folder.connection.query(sql_statement)
+    unless sub_folder_ids.nil?
+      Folder.find(sub_folder_ids).each do |sub_folder|
+        ids = sub_folder.find_sub_folders(ids)
+      end
+    end
+    ids
+  end
 end

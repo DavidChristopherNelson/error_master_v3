@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   get 'bulk_action',
       to: 'rules#destroy',
       constraints: { query_string: /routeToRuleDestroy/ }
-  resources :mappings, :rules, :filters, :deco_errors, :folders
+  resources :rules, :filters, :deco_errors, :folders
 
   #Background workers
   mount Sidekiq::Web => '/sidekiq'
