@@ -20,6 +20,15 @@
         </div>
         </div>
         <% next %>
+      <% elsif field_info[:field] == :parameters %>
+        <div class="field-title">
+          Params
+        </div>
+        <div class="field-data">
+          <%= sanitize(ap JSON(@deco_error[:parameters].gsub('=>', ':')), options = {}) %>
+        </div>
+        </div>
+        <% next %>
       <% end %>
       <div class="field-title">
         <%= field_info[:descriptor] %>

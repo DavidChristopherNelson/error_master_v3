@@ -68,12 +68,18 @@ $hue-rotate-black: invert(0%) sepia(2%) saturate(8%) hue-rotate(0deg) brightness
 h1 {
   line-height: 40px;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 h3 {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+pre {
+  background-color: transparent !important;
 }
 
 /* General - Structure ------------------------------ */
@@ -277,9 +283,6 @@ button {
 }
 
 /* top-bar - dropdown menu ------------------------------ */
-.dropdown {
-}
- 
 .dropdown-content {
   position: absolute;
   top: 40px;
@@ -302,6 +305,42 @@ button {
   width: 690px;
   height: 350px;
   margin-left: 10px;
+}
+
+/* top-bar - popovers ------------------------------ */
+.popover-content {
+  position: absolute;
+  display: none;
+}
+ 
+.popover:hover .popover-content {
+  display: block;
+}
+
+.popover-content h3 {
+  padding: 5px;
+  color: white;
+  background-color: $theme-green-light;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  font-weight:normal;
+}
+
+.tab {
+  width: 0; 
+  height: 0; 
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid $theme-green-light;
+  margin-left: 15px;
+  margin-top: -5px;
+}
+
+.top-bar-popover {
+  top: 45px;
+}
+
+.filter-popover {
+  top: 320px;
 }
 
 /* ############################################################################# */

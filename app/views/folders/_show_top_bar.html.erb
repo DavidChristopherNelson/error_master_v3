@@ -2,15 +2,24 @@
   <div class="left">
     <%= image_tag("logo_text_horizontal_black.svg", class: "logo white") %>
     <%= render "/shared/dropdown_menu", filters: @filters  %>
-    <button class="check-all">
+    <button class="check-all popover top-bar-popover">
       <%= image_tag("check-all.svg", class: "icon white") %>
+      <div class="popover-content">
+        <div class="tab"></div>
+        <h3>Check all errors</h3>
+      </div>
     </button>
     <button type="submit" 
             name="submission_data" 
             value="routeToDecoErrorUpdate"
             form="bulk_action"
-            id="mark-as-read-button">
+            id="mark-as-read-button"
+            class="popover top-bar-popover">
       <%= image_tag("eye.svg", class: "icon white") %>
+      <div class="popover-content">
+        <div class="tab"></div>
+        <h3>Mark errors as read</h3>
+      </div>
       <input form="bulk_action" 
               type="checkbox" 
               name="deco_error[read]" 
@@ -22,8 +31,13 @@
             name="submission_data"
             value="routeToDecoErrorUpdate"
             form="bulk_action"
-            id="mark-as-unread-button">
+            id="mark-as-unread-button"
+            class="popover top-bar-popover">
       <%= image_tag("eye-closed.svg", class: "icon white") %>
+      <div class="popover-content">
+        <div class="tab"></div>
+        <h3>Mark errors as unread</h3>
+      </div>
       <input form="bulk_action" 
               type="checkbox" 
               name="deco_error[read]" 
@@ -34,11 +48,23 @@
     <button type="submit" 
             name="submission_data" 
             value="routeToDecoErrorDestroy"
-            form="bulk_action">
+            form="bulk_action"
+            class="popover top-bar-popover">
       <%= image_tag("trash.svg", class: "icon white") %>
+      <div class="popover-content">
+        <div class="tab"></div>
+        <h3>Delete selected errors</h3>
+      </div>
     </button>
-    <%= link_to folder_path(id: @folder.id, rule_engine: true), remote: true do %>
+    <%= link_to folder_path(id: @folder.id, rule_engine: true), 
+      class: "popover top-bar-popover", remote: true do %>
       <%= image_tag("rule-engine.svg", class: "icon white") %>
+      <div class="popover-content">
+        <div class="tab"></div>
+        <button>
+          <h3>Run rule engine on this folder</h3>
+        </button>
+      </div>
     <% end %>
   </div>
 

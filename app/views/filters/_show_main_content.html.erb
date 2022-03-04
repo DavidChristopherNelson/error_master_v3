@@ -8,14 +8,23 @@
 <div class="layer">
   <div class="left"> 
     <h1>Rules</h1>
-    <button class="check-all">
+    <button class="check-all popover filter-popover">
       <%= image_tag("check-all.svg", class: "icon") %>
+      <div class="popover-content">
+        <div class="tab"></div>
+        <h3>Check all rules</h3>
+      </div>
     </button>
     <button type="submit" 
             name="submission_data" 
             value="routeToRuleDestroy"
-            form="bulk_action">
+            form="bulk_action"
+            class="popover filter-popover">
       <%= image_tag("trash.svg", class: "icon black") %>
+      <div class="popover-content">
+        <div class="tab"></div>
+        <h3>Delete selected rules</h3>
+      </div>
     </button>
     <a class="modal-trigger" data-target="#new-rule" >
       <%= image_tag("plus.svg", class: "icon") %>

@@ -6,17 +6,28 @@
   <% end %>
   <h1 class="white"> 
     <%= @deco_error.title %>
-    <%= link_to folder_path(id: @folder.id, 
-                            ignore: {'field' => 'remote_ip',
-                                     'value' => @deco_error.remote_ip}), 
-                            remote: true do %>
-      <%= image_tag("thumb-down.svg", class: "icon") %>
-    <% end %>
   </h1>
-  <%= link_to deco_error_path(id: @deco_error.id, folder_id: @folder.id), 
-              method: :delete,
-              remote: true do %>
+  <%= link_to folder_path(id: @folder.id, 
+                          ignore: {'field' => 'remote_ip',
+                                   'value' => @deco_error.remote_ip}), 
+                          class: 'popover top-bar-popover',
+                          remote: true do %>
+    <%= image_tag("thumb-down.svg", class: "icon white") %>
+    <div class="popover-content">
+      <div class="tab"></div>
+      <h3>Ignore errors with this remote ip</h3>
+    </div>
+  <% end %>
+  <%= link_to deco_error_path(id: @deco_error.id, 
+                              folder_id: @folder.id), 
+                              class: 'popover top-bar-popover',
+                              method: :delete,
+                              remote: true do %>
     <%= image_tag("trash.svg", class: "icon white") %>
+      <div class="popover-content">
+        <div class="tab"></div>
+        <h3>Delete this error</h3>
+      </div>
   <% end %>
 </div>
 <div class="top-bar-modals">
