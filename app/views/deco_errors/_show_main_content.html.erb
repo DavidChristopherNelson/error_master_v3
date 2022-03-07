@@ -9,18 +9,18 @@
       <% if field_info[:field] == :action %>
         </div>
         <% next %>
-      <% elsif field_info[:field] == :controller %>
+      <% elsif field_info[:field] == :controller && 
+               !@deco_error[:controller].nil? %>
         <div class="field-title">
           Controller#Action
         </div>
         <div class="field-data">
-          <% unless @deco_error[:controller] == nil %>
-            <%= "#{@deco_error[:controller]}##{@deco_error[:action]}" %>
-          <% end %>
+          <%= "#{@deco_error[:controller]}##{@deco_error[:action]}" %>
         </div>
         </div>
         <% next %>
-      <% elsif field_info[:field] == :parameters %>
+      <% elsif field_info[:field] == :parameters && 
+               !@deco_error[:parameters].nil? %>
         <div class="field-title">
           Params
         </div>
