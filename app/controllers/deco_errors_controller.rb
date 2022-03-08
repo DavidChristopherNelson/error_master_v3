@@ -43,10 +43,11 @@ class DecoErrorsController < ApplicationController
     # or from a third party site. (The third party site won't have an
     # authenticity_token)
     excluded_fields = %w[id folder_id filter_id created_at updated_at]
+    fields_to_convert_to_hash = %w[parameters, session_data]
     if params['authenticity_token']
-      process_user_generated_error(excluded_fields)
+      process_user_generated_error(excluded_fields, fields_to_convert_to_hash)
     else
-      process_api_generated_error(excluded_fields)
+      sql_insert_success = process_api_generated_error(excluded_fields)
     end
 
     respond_to do |format|
@@ -132,33 +133,25 @@ class DecoErrorsController < ApplicationController
     puts("It took #{time_after - time_before} seconds to run #{experiment_name}.")
   end
 
-  # Error data can contain fields that are strings which represent hashes. 
-  # However, these strings might not follow JSON convention, for instance they 
-  # might be generated from using Ruby’s .to_s method on a hash. This method 
-  # tries a few common patterns to convert the string into a hash. 
+  # This method saves the data in params into @deco_error. Since @deco_error
+  # has scope outside of this method nothing is returned.
   #
-  # @param [string] the string to attempt to turn into a hash.
-  # @return [hash or nil] the hash representation of the string or nil if the 
-  #                       convertion was not achieved.
-  def convert_string_to_hash(data_as_string)
-    begin
-      data_as_hash = JSON(data_as_string)
-    rescue JSON::ParserError
-      data_as_string[1..-2] = data_as_string[1..-2].gsub(/[\{]/, ' (open curly brace) ')
-      data_as_string[1..-2] = data_as_string[1..-2].gsub(/[\}]/, ' (close curly brace) ')
-      data_as_string.gsub!(/"/,"") # converts " into '
-      data_as_string.gsub!(/([\:\w\-\/\']+)\=\>([\w\-\/\s\'\:\(\)\+\.]+)/, '"\1": "\2"')
-      data_as_string.gsub!(/\n/, '')
-      begin
-        data_as_hash = JSON(data_as_string)
-      rescue JSON::ParserError
-        return nil
-      else 
-        return data_as_hash
+  # @param [array of strings] These are field names like 'id' that need to be
+  #                           determined by Error Master and not from the input
+  #                           data.
+  def process_user_generated_error(excluded_fields, fields_to_convert_to_hash)
+    converted_json = JSON(params[:deco_error][:json])
+    @deco_error.attributes.each_key do |field|
+      next if converted_json[field].nil?
+      next if excluded_fields.include?(field)
+      if fields_to_convert_to_hash.include?(field)
+        @deco_error[field] = convert_string_to_hash(converted_json[field])
+      else
+        @deco_error[field] = converted_json[field]
       end
-    else
-      return data_as_hash
     end
+    @deco_error['filter_id'] = 1
+    @deco_error['folder_id'] = 1
   end
 
   # This method saves the data in params into @deco_error. Since @deco_error
@@ -167,18 +160,7 @@ class DecoErrorsController < ApplicationController
   # @param [array of strings] These are field names like 'id' that need to be
   #                           determined by Error Master and not from the input
   #                           data.
-  def process_user_generated_error(excluded_fields)
-    converted_json = JSON(params[:deco_error][:json])
-    @deco_error.attributes.each_key do |field|
-      next if converted_json[field].nil?
-      next if excluded_fields.include?(field)
-
-      @deco_error[field] = converted_json[field]
-    end
-    @deco_error['filter_id'] = 1
-    @deco_error['folder_id'] = 1
-  end
-
+  # @return [boolean] true if error is saved, false otherwise.
   def process_api_generated_error(excluded_fields)
     error_fields_and_values = {}
     params['json'].each do |pair|
@@ -206,5 +188,35 @@ class DecoErrorsController < ApplicationController
     resource = { controller: params[:controller], id: error_id }
     RuleEngineWorker.perform_async(resource)
     return sql_insert_success
+  end
+
+  # Error data can contain fields that are strings which represent hashes. 
+  # However, these strings might not follow JSON convention, for instance they 
+  # might be generated from using Ruby’s .to_s method on a hash. This method 
+  # tries a few common patterns to convert the string into a hash. 
+  #
+  # @param [string] the string to attempt to turn into a hash.
+  # @return [hash or string] the hash representation of the string if 
+  #                          conversion occurred otherwise the parameter string
+  #                          is returned.
+  def convert_string_to_hash(data_as_string)
+    begin
+      data_as_hash = JSON(data_as_string)
+    rescue JSON::ParserError
+      data_as_string[1..-2] = data_as_string[1..-2].gsub(/[\{]/, ' (open curly brace) ')
+      data_as_string[1..-2] = data_as_string[1..-2].gsub(/[\}]/, ' (close curly brace) ')
+      data_as_string.gsub!(/"/,"") # converts " into '
+      data_as_string.gsub!(/([\:\w\-\/\']+)\=\>([\w\-\/\s\'\:\(\)\+\.]+)/, '"\1": "\2"')
+      data_as_string.gsub!(/\n/, '')
+      begin
+        data_as_hash = JSON(data_as_string)
+      rescue JSON::ParserError
+        return data_as_string
+      else 
+        return data_as_hash.to_json
+      end
+    else
+      return data_as_hash.to_json
+    end
   end
 end
