@@ -22,10 +22,45 @@
       <% elsif field_info[:field] == :parameters && 
                !@deco_error[:parameters].nil? %>
         <div class="field-title">
-          Params
+          Parameters
         </div>
         <div class="field-data">
-          <%= sanitize(ap JSON(@deco_error[:parameters].gsub('=>', ':')), options = {}) %>
+          <%= sanitize(ap @hashed_data[:parameters]) %>
+        </div>
+        </div>
+        <% next %>
+      <% elsif field_info[:field] == :session_data && 
+               !@deco_error[:session_data].nil? %>
+        <div class="field-title">
+          Session Data
+        </div>
+        <div class="field-data">
+
+          <%= sanitize(ap @hashed_data[:session_data]) %>
+        </div>
+        </div>
+        <% next %>
+      <% elsif field_info[:field] == :environment_variables && 
+               !@deco_error[:environment_variables].nil? %>
+        <div class="field-title">
+          Environment Variables
+        </div>
+        <div class="field-data">
+          <% enviro_var = @deco_error[:environment_variables] %>
+          <% enviro_var.gsub!(/([A-Z_]+:)/, '<br>\1') %>
+          <%= sanitize(enviro_var[4..-1]) %>
+        </div>
+        </div>
+        <% next %>
+      <% elsif field_info[:field] == :exception_stacktrace && 
+               !@deco_error[:exception_stacktrace].nil? %>
+        <div class="field-title">
+          Exception Stacktrace
+        </div>
+        <div class="field-data">
+          <% stacktrace = @deco_error[:exception_stacktrace] %>
+          <% stacktrace.gsub!(/\n/, '<br>') %>
+          <%= sanitize(stacktrace) %>
         </div>
         </div>
         <% next %>

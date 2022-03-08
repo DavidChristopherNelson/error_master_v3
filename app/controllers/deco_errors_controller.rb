@@ -139,16 +139,12 @@ class DecoErrorsController < ApplicationController
   # @param [array of strings] These are field names like 'id' that need to be
   #                           determined by Error Master and not from the input
   #                           data.
-  def process_user_generated_error(excluded_fields, fields_to_convert_to_hash)
+  def process_user_generated_error(excluded_fields)
     converted_json = JSON(params[:deco_error][:json])
     @deco_error.attributes.each_key do |field|
       next if converted_json[field].nil?
       next if excluded_fields.include?(field)
-      if fields_to_convert_to_hash.include?(field)
-        @deco_error[field] = convert_string_to_hash(converted_json[field])
-      else
-        @deco_error[field] = converted_json[field]
-      end
+      @deco_error[field] = converted_json[field]
     end
     @deco_error['filter_id'] = 1
     @deco_error['folder_id'] = 1
@@ -193,13 +189,12 @@ class DecoErrorsController < ApplicationController
   # Error data can contain fields that are strings which represent hashes. 
   # However, these strings might not follow JSON convention, for instance they 
   # might be generated from using Ruby’s .to_s method on a hash. This method 
-  # tries a few common patterns to convert the string into a hash. 
+  # tries a few common patterns to convert the string into a json hash. 
   #
   # @param [string] the string to attempt to turn into a hash.
-  # @return [hash or string] the hash representation of the string if 
-  #                          conversion occurred otherwise the parameter string
-  #                          is returned.
-  def convert_string_to_hash(data_as_string)
+  # @return [string] the json hash representation of the string if conversion 
+  #                  occurred otherwise the parameter string is returned.
+  def convert_string_to_json(data_as_string)
     begin
       data_as_hash = JSON(data_as_string)
     rescue JSON::ParserError

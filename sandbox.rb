@@ -232,6 +232,92 @@ my_hash = {
 
 
 
+{"title":"Testing user generated Error","release":"stable","session_data":"{:set_login_token=>:delete,\n :last_shopping_page=>\"/blank_product/96468673/VIP-Golf-Academy-47-MVP\",\n \"flash\"=>{},\n \"user\"=>nil,\n :request_count=>1,\n :init_app=>4,\n :ref=>nil,\n :expiry_time=>Mon Aug 16 23:29:28 +1000 2021,\n :validation_key=>\"ndodoslynkawindeprihaxogypolajefrordaquycrybofryho\",\n :d_key=>\"mansionridge.deco-apparel.com\",\n :return_to_is_public=>true,\n :utype=>\"0\",\n :brand_id=>12035517,\n :back_location=>\n  \"http://mansionridge.deco-apparel.com/blank_product/96468673/VIP-Golf-Academy-47-MVP\",\n :return_to=>\n  \"http://mansionridge.deco-apparel.com/blank_product/96468673/VIP-Golf-Academy-47-MVP\",\n :init_url=>\"/blank_product/96468673/VIP-Golf-Academy-47-MVP\",\n :afid=>111282}"}
+
+# hash
+{:set_login_token=>:delete, :last_shopping_page=>"/blank_product/96468673/VIP-Golf-Academy-47-MVP", "flash"=>{}}.to_json
+# hash.to_json
+"{\"set_login_token\":\"delete\",\"last_shopping_page\":\"/blank_product/96468673/VIP-Golf-Academy-47-MVP\",\"flash\":{}}"
+# hash.to_s
+"{:set_login_token=>:delete, :last_shopping_page=>\"/blank_product/96468673/VIP-Golf-Academy-47-MVP\", \"flash\"=>{}}"
+# error data containing hash.to_json
+{"title":"Testing user generated Error","release":"stable","session_data":"{\"set_login_token\":\"delete\",\"last_shopping_page\":\"/blank_product/96468673/VIP-Golf-Academy-47-MVP\",\"flash\":{}}"}
+
+# error data containing hash.to_s
+{"title":"Testing user generated Error","release":"stable","session_data":"{:set_login_token=>:delete, :last_shopping_page=>\"/blank_product/96468673/VIP-Golf-Academy-47-MVP\", \"flash\"=>{}}"}
+
+
+
+
+    fields_to_convert_to_hash = %w[parameters, session_data]
+
+  # Error data can contain fields that are strings which represent hashes. 
+  # However, these strings might not follow JSON convention, for instance they 
+  # might be generated from using Ruby’s .to_s method on a hash. This method 
+  # tries a few common patterns to convert the string into a json hash. 
+  #
+  # @param [string] the string to attempt to turn into a hash.
+  # @return [string] the json hash representation of the string if conversion 
+  #                  occurred otherwise the parameter string is returned.
+  def convert_string_to_json(data_as_string)
+    begin
+      data_as_hash = JSON(data_as_string)
+    rescue JSON::ParserError
+      data_as_string[1..-2] = data_as_string[1..-2].gsub(/[\{]/, ' (open curly brace) ')
+      data_as_string[1..-2] = data_as_string[1..-2].gsub(/[\}]/, ' (close curly brace) ')
+      data_as_string.gsub!(/"/,"") # converts " into '
+      data_as_string.gsub!(/([\:\w\-\/\']+)\=\>([\w\-\/\s\'\:\(\)\+\.]+)/, '"\1": "\2"')
+      data_as_string.gsub!(/\n/, '')
+      begin
+        data_as_hash = JSON(data_as_string)
+      rescue JSON::ParserError
+        return data_as_string
+      else 
+        return data_as_hash.to_json
+      end
+    else
+      return data_as_hash.to_json
+    end
+  end
+
+    @hashed_data = {
+      parameters: convert_string_to_json(@deco_error.parameters),
+      session_data: convert_string_to_json(@deco_error.session_data)
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

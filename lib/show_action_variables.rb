@@ -49,6 +49,10 @@ module ShowActionVariables
     top_bar_variables
 
     @deco_error_display_info = DecoError.display_info
+    @hashed_data = {
+      parameters: convert_string_to_hash(@deco_error.parameters),
+      session_data: convert_string_to_hash(@deco_error.session_data)
+    }
   end
 
   def home_show_action_variables
@@ -127,5 +131,34 @@ module ShowActionVariables
       export_data: 'XXXX'
     }
     @fields = DecoError.new.attributes.keys
+  end
+
+  # Error data can contain fields that are strings which represent hashes. 
+  # However, these strings might not follow JSON convention, for instance they 
+  # might be generated from using Ruby’s .to_s method on a hash. This method 
+  # tries a few common patterns to convert the string into a json hash. 
+  #
+  # @param [string] the string to attempt to turn into a hash.
+  # @return [string] the json hash representation of the string if conversion 
+  #                  occurred otherwise the parameter string is returned.
+  def convert_string_to_hash(data_as_string)
+    begin
+      data_as_hash = JSON(data_as_string)
+    rescue JSON::ParserError
+      data_as_string[1..-2] = data_as_string[1..-2].gsub(/[\{]/, ' (open curly brace) ')
+      data_as_string[1..-2] = data_as_string[1..-2].gsub(/[\}]/, ' (close curly brace) ')
+      data_as_string.gsub!(/"/,"") # converts " into '
+      data_as_string.gsub!(/([\:\w\-\/\']+)\=\>([\w\-\/\s\'\:\(\)\+\.]+)/, '"\1": "\2"')
+      data_as_string.gsub!(/\n/, '')
+      begin
+        data_as_hash = JSON(data_as_string)
+      rescue JSON::ParserError
+        return data_as_string
+      else 
+        return data_as_hash
+      end
+    else
+      return data_as_hash
+    end
   end
 end

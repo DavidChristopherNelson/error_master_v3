@@ -98,14 +98,15 @@ fields = %i[title priority request_id remote_ip controller action]
   end
 end
 
-# Setup 1000 errors
+# Setup 100 errors
 error_data = []
 Dir['*/errors/*'].each do |path|
   error_data << JSON.parse(File.read(path))
 end
 fields = DecoError.attribute_names[1..-1]
+fields_to_convert_to_hash = %w[parameters, session_data]
 
-10.times do |iteration|
+1.times do |iteration|
   bulk_insert = []
   error_data.each do |error|
     values = []
@@ -120,3 +121,22 @@ fields = DecoError.attribute_names[1..-1]
   DecoError.connection.query(sql_string)
   p iteration
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
